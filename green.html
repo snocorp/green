@@ -1,0 +1,73 @@
+<head>
+  <title>green - simple invoices</title>
+</head>
+
+<body>
+  {{> layout}}
+</body>
+
+<template name="layout">
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">green</a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar">
+        {{> menu}}
+
+        <ul class="nav navbar-nav navbar-right">
+          {{> loginButtons}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    {{> yield}}
+  </div>
+</template>
+
+
+
+<template name="menu">
+  <ul class="nav navbar-nav">
+    <li><a href="/">invoices</a></li>
+    <li><a href="/items">items</a></li>
+  </ul>
+</template>
+
+<template name="invoices">
+  <div class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+  <ul>
+    {{#each invoices}}
+      {{> invoice}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="invoice">
+  <li>{{period.start}} - {{period.end}}</li>
+</template>
+
+<template name="new_item">
+  <input type="text" name="code" placeholder="item code"/>
+  <input type="number" name="price" placeholder="item code"/>
+</template>
+
+<template name="items">
+  <button>new item</button>
+  <ul>
+    {{#each items}}
+      {{> item}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="item">
+  <li>{{code}}: {{prices.current}}</li>
+</template>
