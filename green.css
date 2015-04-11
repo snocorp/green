@@ -15,8 +15,9 @@
   margin-bottom: 0;
   text-align: right;
   font-size: 40px;
+  cursor: pointer;
 }
 
-.main {
-  position: relative;
+.jumbotron-icon {
+  font-size: 128px;
 }

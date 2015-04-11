@@ -2,11 +2,9 @@
   <title>green - simple invoices</title>
 </head>
 
-<body>
-  {{> layout}}
-</body>
+<body></body>
 
-<template name="layout">
+<template name="ApplicationLayout">
   <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
       <div class="navbar-header">
@@ -33,34 +31,66 @@
 </template>
 
 
-
 <template name="menu">
-  <ul class="nav navbar-nav">
-    <li><a href="/">invoices</a></li>
-    <li><a href="/items">items</a></li>
-  </ul>
+  {{#if currentUser}}
+    <ul class="nav navbar-nav">
+      <li><a href="/invoices">invoices</a></li>
+      <li><a href="/items">items</a></li>
+    </ul>
+  {{/if}}
 </template>
 
-<template name="invoices">
-  <div class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+<template name="Home">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <div class="jumbotron-icon pull-right"><span class="glyphicon glyphicon-list-alt"></span></div>
+        <h1>green</h1>
+        <p>Simple periodic invoicing for service professionals.</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="InvoicesNew">
+  <form>
+    <div class="form-group">
+      <label for="new_invoice_daterange">Date Range</label>
+      <div class="input-daterange input-group" id="new_invoice_daterange">
+        <input type="text" class="input-sm form-control" name="start" />
+        <span class="input-group-addon">to</span>
+        <input type="text" class="input-sm form-control" name="end" />
+      </div>
+    </div>
+  </form>
+</template>
+
+<template name="Invoices">
+  <div id="new_invoice" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+  {{#if data.length}}
   <ul>
-    {{#each invoices}}
+    {{#each data}}
       {{> invoice}}
     {{/each}}
   </ul>
+  {{else}}
+    <div class="well">
+      To create your first invoice click the <span class="glyphicon glyphicon-plus-sign"></span> at the bottom right.
+    </div>
+  {{/if}}
 </template>
 
 <template name="invoice">
   <li>{{period.start}} - {{period.end}}</li>
 </template>
 
-<template name="new_item">
+<template name="ItemsNew">
   <input type="text" name="code" placeholder="item code"/>
   <input type="number" name="price" placeholder="item code"/>
 </template>
 
-<template name="items">
-  <button>new item</button>
+<template name="Items">
+  <div id="new_item" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
   <ul>
     {{#each items}}
       {{> item}}
