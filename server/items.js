@@ -1,5 +1,5 @@
 'use strict';
 
 Meteor.publish('items', function() {
-  return Items.find();
+  return Items.find({userId: this.userId});
 });

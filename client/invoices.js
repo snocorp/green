@@ -78,3 +78,29 @@ Template.invoiceItems.helpers({
     return InvoiceItems.find({invoiceId: id});
   }
 });
+
+Template.invoiceItem.onCreated(function() {
+  this.editing = new ReactiveVar(false);
+});
+
+Template.invoiceItem.events({
+  'click #invoice_item_edit_invoice_item': function(event, template) {
+    template.editing.set(true);
+  },
+  'click #invoice_item_edit_done': function(event, template) {
+    template.editing.set(false);
+  },
+  'click #invoice_item_new_item': function(event, template) {
+    console.log(Iron.controller());
+    Router.go('items.new', {}, {query: "r=" + encodeURIComponent(Iron.controller().url)});
+  }
+});
+
+Template.invoiceItem.helpers({
+  isEditing: function() {
+    return Template.instance().editing.get();
+  },
+  items: function() {
+    return Items.find({});
+  }
+});

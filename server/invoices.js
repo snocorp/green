@@ -1,5 +1,5 @@
 'use strict';
 
 Meteor.publish('invoices', function() {
-  return Invoices.find();
+  return Invoices.find({userId: this.userId});
 });

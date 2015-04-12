@@ -57,5 +57,36 @@
 </template>
 
 <template name="invoiceItem">
-  <li class="list-group-item">{{code}} {{quantity}}</li>
+  <li class="list-group-item">
+    {{#if isEditing}}
+      <div class="list-item-btn-group pull-right">
+        <button id="invoice_item_edit_done" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+      <div class="row form-inline">
+        <div class="col-md-1">
+          <label for="invoice_item_item">Item</label>
+        </div>
+        <div class="col-md-2">
+          <select id="invoice_item_item" class="form-control">
+            <option value="">select an item</option>
+            {{#each items}}
+              <option value="{{code}}">{{description}} ({{code}})</option>
+            {{/each}}
+          </select>
+          <span id="invoice_item_new_item" class="glyphicon glyphicon-plus" title="create an item"></span>
+        </div>
+        <div class="col-md-1">
+          <label for="invoice_item_quantity">Quantity</label>
+        </div>
+        <div class="col-md-2">
+          <input id="invoice_item_quantity" class="form-control text-right" value="{{quantity}}"/>
+        </div>
+      </div>
+    {{else}}
+      <div class="list-item-btn-group pull-right">
+        <button id="invoice_item_edit_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+      </div>
+      {{code}} {{quantity}}
+    {{/if}}
+  </li>
 </template>
