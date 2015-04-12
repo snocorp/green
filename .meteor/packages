@@ -5,10 +5,10 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
 insecure
 accounts-password
 iron:router
 ian:accounts-ui-bootstrap-3
 twbs:bootstrap
 rajit:bootstrap3-datepicker
+momentjs:moment

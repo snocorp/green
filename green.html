@@ -55,24 +55,27 @@
 <template name="InvoicesNew">
   <form>
     <div class="form-group">
-      <label for="new_invoice_daterange">Date Range</label>
-      <div class="input-daterange input-group" id="new_invoice_daterange">
-        <input type="text" class="input-sm form-control" name="start" />
-        <span class="input-group-addon">to</span>
-        <input type="text" class="input-sm form-control" name="end" />
-      </div>
+      {{#with invoice.period}}
+        <label for="new_invoice_daterange">Date Range</label>
+        <div class="input-daterange input-group" id="new_invoice_daterange">
+          <input id="new_invoice_period_start" type="text" class="form-control" name="start" value="{{start}}"/>
+          <span class="input-group-addon">to</span>
+          <input id="new_invoice_period_end" type="text" class="form-control" name="end" value="{{end}}" />
+        </div>
+      {{/with}}
     </div>
+    <button id="create_invoice" class="btn btn-default" type="button">Create</button>
   </form>
 </template>
 
 <template name="Invoices">
   <div id="new_invoice" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
-  {{#if data.length}}
-  <ul>
-    {{#each data}}
+  {{#if hasInvoices}}
+  <div class="list-group">
+    {{#each invoices}}
       {{> invoice}}
     {{/each}}
-  </ul>
+  </div>
   {{else}}
     <div class="well">
       To create your first invoice click the <span class="glyphicon glyphicon-plus-sign"></span> at the bottom right.
@@ -81,7 +84,11 @@
 </template>
 
 <template name="invoice">
-  <li>{{period.start}} - {{period.end}}</li>
+  <a href="{{pathFor route='invoices.show'}}" class="list-group-item">{{period.start}} - {{period.end}}</a>
+</template>
+
+<template name="InvoicesShow">
+  <h2>{{period.start}} - {{period.end}}</h2>
 </template>
 
 <template name="ItemsNew">
