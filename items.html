@@ -1,0 +1,17 @@
+<template name="ItemsNew">
+  <input type="text" name="code" placeholder="item code"/>
+  <input type="number" name="price" placeholder="item code"/>
+</template>
+
+<template name="Items">
+  <div id="new_item" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+  <ul>
+    {{#each items}}
+      {{> item}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="item">
+  <li>{{code}}: {{prices.current}}</li>
+</template>

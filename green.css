@@ -21,3 +21,8 @@
 .jumbotron-icon {
   font-size: 128px;
 }
+
+.list-item-btn-group {
+  margin-top: -5px;
+  margin-right: -7px;
+}

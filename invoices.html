@@ -1,0 +1,61 @@
+<template name="InvoicesNew">
+  <form>
+    <div class="form-group">
+      <label for="new_invoice_daterange">Date Range</label>
+      <div class="input-daterange input-group" id="new_invoice_daterange">
+        <input id="new_invoice_period_start" type="text" class="form-control" name="start" value="{{start}}"/>
+        <span class="input-group-addon">to</span>
+        <input id="new_invoice_period_end" type="text" class="form-control" name="end" value="{{end}}" />
+      </div>
+    </div>
+    <button id="create_invoice" class="btn btn-default" type="button">Create</button>
+  </form>
+</template>
+
+<template name="Invoices">
+  <div id="invoices_new_invoice" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+  {{#if invoices.count}}
+    <div class="list-group">
+      {{#each invoices}}
+        {{> invoice}}
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="well">
+      To create your first invoice click the <span class="glyphicon glyphicon-plus-sign"></span> at the bottom right.
+    </div>
+  {{/if}}
+</template>
+
+<template name="invoice">
+  <a href="{{pathFor route='invoices.show'}}" class="list-group-item">{{start}} - {{end}}</a>
+</template>
+
+<template name="InvoicesShow">
+  <h2>{{invoice.start}} - {{invoice.end}}</h2>
+  {{> invoiceItems}}
+</template>
+
+<template name="invoiceItems">
+  <ul class="list-group">
+    <li class="list-group-item active">
+      <div class="list-item-btn-group pull-right">
+        <button id="invoice_items_new_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+      </div>
+      Items
+    </li>
+    {{#if items.count}}
+      {{#each items}}
+        {{> invoiceItem}}
+      {{/each}}
+    {{else}}
+      <li class="list-group-item">
+        To create an invoice item click the <span class="glyphicon glyphicon-plus"></span> above.
+      </li>
+    {{/if}}
+  </ul>
+</template>
+
+<template name="invoiceItem">
+  <li class="list-group-item">{{code}} {{quantity}}</li>
+</template>
