@@ -1,6 +1,19 @@
 <template name="ItemsNew">
-  <input type="text" name="code" placeholder="item code"/>
-  <input type="number" name="price" placeholder="item code"/>
+  <form>
+    <div class="form-group">
+      <label for="items_new_code">Code</label>
+      <input id="items_new_code" class="form-control" type="text" name="code" placeholder="eg. PVT30"/>
+    </div>
+    <div class="form-group">
+      <label for="items_new_description">Description</label>
+      <input id="items_new_desription" class="form-control" type="text" name="description" placeholder="eg. Private Session 30 Minutes"/>
+    </div>
+    <div class="form-group">
+      <label for="items_new_price">Price</label>
+      <input id="items_new_price" class="form-control" name="price" placeholder="eg. 50.00" pattern="\d*.\d\d"/>
+    </div>
+    <button id="items_new_create_item" type="button" class="btn btn-default">create</button>
+  </form>
 </template>
 
 <template name="Items">
@@ -13,5 +26,9 @@
 </template>
 
 <template name="item">
-  <li>{{code}}: {{prices.current}}</li>
+  <li>({{code}}) {{description}}</li>
+</template>
+
+<template name="ItemsShow">
+  ({{code}}) {{description}}
 </template>

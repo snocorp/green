@@ -26,7 +26,7 @@ Template.InvoicesNew.events({
   'change #new_invoice_period_end': function(event, template) {
     Session.set('invoices_new_end', $('#new_invoice_period_end').val());
   },
-  'click #create_invoice': function(event, template) {
+  'click #invoices_new_create_invoice': function(event, template) {
     var id = Invoices.insert({
       userId: Meteor.userId(),
       start: $('#new_invoice_period_start').val(),
@@ -92,7 +92,7 @@ Template.invoiceItem.events({
   },
   'click #invoice_item_new_item': function(event, template) {
     console.log(Iron.controller());
-    Router.go('items.new', {}, {query: "r=" + encodeURIComponent(Iron.controller().url)});
+    Router.go('items.new', {}, {query: "route=invoices.show&_id=" + encodeURIComponent(Iron.controller().params._id)});
   }
 });
 
