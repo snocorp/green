@@ -1,16 +1,25 @@
 <template name="ItemsNew">
   <form>
-    <div class="form-group">
+    <div class="form-group {{hasError codeError}}">
       <label for="items_new_code">Code</label>
       <input id="items_new_code" class="form-control" type="text" name="code" placeholder="eg. PVT30"/>
+      {{#if codeError}}
+        <p class="help-block">{{codeError}}</p>
+      {{/if}}
     </div>
-    <div class="form-group">
+    <div class="form-group {{hasError descriptionError}}">
       <label for="items_new_description">Description</label>
-      <input id="items_new_desription" class="form-control" type="text" name="description" placeholder="eg. Private Session 30 Minutes"/>
+      <input id="items_new_description" class="form-control" type="text" name="description" placeholder="eg. Private Session 30 Minutes"/>
+      {{#if descriptionError}}
+        <p class="help-block">{{descriptionError}}</p>
+      {{/if}}
     </div>
-    <div class="form-group">
+    <div class="form-group {{hasError priceError}}">
       <label for="items_new_price">Price</label>
       <input id="items_new_price" class="form-control" name="price" placeholder="eg. 50.00" pattern="\d*.\d\d"/>
+      {{#if priceError}}
+        <p class="help-block">{{priceError}}</p>
+      {{/if}}
     </div>
     <button id="items_new_create_item" type="button" class="btn btn-default">create</button>
   </form>

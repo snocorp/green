@@ -64,29 +64,54 @@
       </div>
       <div class="row form-inline">
         <div class="col-md-1">
-          <label for="invoice_item_item">Item</label>
+          <label for="invoice_item_item_{{_id}}">Item</label>
         </div>
-        <div class="col-md-2">
-          <select id="invoice_item_item" class="form-control">
+        <div class="col-md-4">
+          <select id="invoice_item_item_{{_id}}" class="form-control">
             <option value="">select an item</option>
             {{#each items}}
-              <option value="{{code}}">{{description}} ({{code}})</option>
+              <option value="{{_id}}" {{selectedIfEquals _id ../itemId}}>{{description}} ({{code}})</option>
             {{/each}}
           </select>
           <span id="invoice_item_new_item" class="glyphicon glyphicon-plus" title="create an item"></span>
         </div>
-        <div class="col-md-1">
-          <label for="invoice_item_quantity">Quantity</label>
+        <div class="col-md-1 {{hasError quantityError}}">
+          <label for="invoice_item_quantity_{{_id}}">Quantity</label>
         </div>
-        <div class="col-md-2">
-          <input id="invoice_item_quantity" class="form-control text-right" value="{{quantity}}"/>
+        <div class="col-md-2 {{hasError quantityError}}">
+          <input id="invoice_item_quantity_{{_id}}" type="number" class="form-control text-right" value="{{quantity}}"/>
         </div>
       </div>
+      {{#if quantityError}}
+        <div class="row row-hint has-error">
+          <div class="col-md-5">
+            <span class="help-block">{{quantityError}}</span>
+          </div>
+        </div>
+      {{/if}}
+      {{#unless items.count}}
+        <div class="row row-hint">
+          <div class="col-md-5">
+            To create a new item, click the <span class="glyphicon glyphicon-plus"></span> next to the item list.
+          </div>
+        </div>
+      {{/unless}}
     {{else}}
       <div class="list-item-btn-group pull-right">
         <button id="invoice_item_edit_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
       </div>
-      {{code}} {{quantity}}
+      {{#if itemId}}
+        <div class="row">
+          <div class="col-sm-3">
+            {{itemDescription}} ({{itemCode}})
+          </div>
+          <div class="col-sm-1">
+            {{quantity}}
+          </div>
+        </div>
+      {{else}}
+        To set the item type and quantity click the <span class="glyphicon glyphicon-pencil"></span> to the right.
+      {{/if}}
     {{/if}}
   </li>
 </template>
