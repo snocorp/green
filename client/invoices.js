@@ -34,6 +34,9 @@ Template.InvoicesNew.events({
     });
 
     Router.go('invoices.show', {_id: id});
+  },
+  'click #invoices_new_cancel': function(event, template) {
+    Router.go('invoices');
   }
 });
 
