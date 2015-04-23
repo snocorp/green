@@ -21,16 +21,26 @@
         <p class="help-block">{{priceError}}</p>
       {{/if}}
     </div>
-    <button id="items_new_create_item" type="button" class="btn btn-default">create</button>
+    <button id="items_new_create_item" type="button" class="btn btn-primary">create</button>
+    <button id="items_new_cancel" type="button" class="btn btn-default">cancel</button>
   </form>
 </template>
 
 <template name="Items">
   <div id="new_item" class="floating-action"><span class="glyphicon glyphicon-plus-sign"></span></div>
+  {{#if items.count}}
+    <div class="list-group">
+      {{#each items}}
+        {{> item}}
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="well">
+      To create your first item click the <span class="glyphicon glyphicon-plus-sign"></span> at the bottom right.
+    </div>
+  {{/if}}
   <ul>
-    {{#each items}}
-      {{> item}}
-    {{/each}}
+
   </ul>
 </template>
 

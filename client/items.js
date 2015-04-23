@@ -69,7 +69,8 @@ Template.ItemsNew.events({
       userId: Meteor.userId(),
       code: code,
       description: description,
-      price: price
+      price: price,
+      active: true
     });
 
     var params = Iron.controller().params;
@@ -80,6 +81,17 @@ Template.ItemsNew.events({
       Router.go(route, params.query);
     } else {
       Router.go('items.show', {_id: id});
+    }
+  },
+  'click #items_new_cancel': function(event, template) {
+    var params = Iron.controller().params;
+    if (params.query.route) {
+      var route = params.query.route;
+      delete params.query.route;
+
+      Router.go(route, params.query);
+    } else {
+      Router.go('items');
     }
   }
 });
