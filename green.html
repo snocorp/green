@@ -34,8 +34,8 @@
 <template name="menu">
   {{#if currentUser}}
     <ul class="nav navbar-nav">
-      <li><a href="/invoices">invoices</a></li>
-      <li><a href="/items">items</a></li>
+      <li class="{{isActiveRoute regex='invoices'}}"><a href="/invoices">invoices</a></li>
+      <li class="{{isActiveRoute regex='items'}}"><a href="/items">items</a></li>
     </ul>
   {{/if}}
 </template>
