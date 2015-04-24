@@ -40,25 +40,21 @@ Template.InvoicesNew.events({
       template.startError.set('Start date is required');
       error = true;
     } else if (!moment(start, 'YYYY-MM-DD').isValid()) {
-      template.startError.set('Start date is not a valid date');
+      template.startError.set('Start date is not valid');
       error = true;
     } else {
       template.startError.set('');
     }
 
-    console.log(moment(start, 'YYYY-MM-DD'));
-
     if (end === null || end.length === 0) {
       template.endError.set('End date is required');
       error = true;
     } else if (!moment(end, 'YYYY-MM-DD').isValid()) {
-      template.endError.set('End date is not a valid date');
+      template.endError.set('End date is not valid');
       error = true;
     } else {
       template.endError.set('');
     }
-
-    console.log(moment(end, 'YYYY-MM-DD'));
 
     if (error) return;
 
@@ -162,7 +158,6 @@ Template.invoiceItem.events({
     template.editing.set(false);
   },
   'click #invoice_item_new_item': function(event, template) {
-    console.log(Iron.controller());
     Router.go('items.new', {}, {query: "route=invoices.show&_id=" + encodeURIComponent(Iron.controller().params._id)});
   }
 });
