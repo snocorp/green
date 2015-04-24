@@ -45,9 +45,102 @@
 </template>
 
 <template name="item">
-  <li>({{code}}) {{description}}</li>
+  <a href="{{pathFor route='items.show'}}" class="list-group-item">
+    <div class="row">
+      <div class="col-sm-1">
+        {{code}}
+      </div>
+      <div class="col-sm-4">
+        {{description}}
+      </div>
+      <div class="col-sm-2 text-right">
+        {{priceOf this}}
+      </div>
+    </div>
+  </a>
 </template>
 
 <template name="ItemsShow">
-  ({{code}}) {{description}}
+  <h2>{{item.code}}: {{item.description}}</h2>
+  {{> itemPrices item}}
+</template>
+
+<template name="itemPrices">
+  <ul class="list-group">
+    <li class="list-group-item active">
+      <div class="list-item-btn-group pull-right">
+        <button id="item_prices_new_item_price" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+      </div>
+      Prices
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-sm-2">
+          <strong>Current</strong>
+        </div>
+        <div class="col-sm-2 text-right">
+          {{priceOf item}}
+        </div>
+      </div>
+    </li>
+    {{#if prices.count}}
+      {{#each prices}}
+        {{> itemPrice}}
+      {{/each}}
+    {{else}}
+      <li class="list-group-item">
+        To create a historic price click the <span class="glyphicon glyphicon-plus"></span> above.
+      </li>
+    {{/if}}
+  </ul>
+</template>
+
+<template name="itemPrice">
+  <li class="list-group-item">
+    {{#if isEditing}}
+      <div class="list-item-btn-group pull-right">
+        <button id="item_price_edit_done_{{_id}}" type="button" class="btn btn-default btn-sm item_price_edit_done"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+      <div class="row">
+        <div class="col-md-1 {{hasError untilDateError}}">
+          <label for="item_price_until_date_{{_id}}">Until</label>
+        </div>
+        <div class="col-md-3 {{hasError untilDateError}}">
+          <input id="item_price_until_date_{{_id}}" type="text" class="form-control" value="{{untilDate}}"/>
+        </div>
+        <div class="col-md-1 col-md-offset-1 {{hasError priceError}}">
+          <label for="item_price_price_{{_id}}">Price</label>
+        </div>
+        <div class="col-md-2 {{hasError priceError}}">
+          <input id="item_price_price_{{_id}}" type="number" class="form-control text-right" value="{{price}}"/>
+        </div>
+      </div>
+      {{#if untilDateError}}
+        <div class="row row-hint has-error">
+          <div class="col-md-5">
+            <span class="help-block">{{untilDateError}}</span>
+          </div>
+        </div>
+      {{/if}}
+      {{#if priceError}}
+        <div class="row row-hint has-error">
+          <div class="col-md-5">
+            <span class="help-block">{{priceError}}</span>
+          </div>
+        </div>
+      {{/if}}
+    {{else}}
+      <div class="list-item-btn-group pull-right">
+        <button id="item_price_edit_item_price_{{_id}}" type="button" class="btn btn-default btn-sm item_price_edit_item_price"><span class="glyphicon glyphicon-pencil"></span></button>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          {{untilDate}}
+        </div>
+        <div class="col-sm-1 text-right">
+          {{priceOf this}}
+        </div>
+      </div>
+    {{/if}}
+  </li>
 </template>

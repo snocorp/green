@@ -13,3 +13,11 @@ Template.registerHelper('hasError', function(error) {
 Template.registerHelper('selectedIfEquals', function(a, b) {
   return (a === b) ? 'selected' : '';
 });
+
+Template.registerHelper('priceOf', function(item) {
+  if (item) {
+    return '$' + (item.price / 100).toFixed(2);
+  } else {
+    return false;
+  }
+});

@@ -1,5 +1,5 @@
 /* jshint node: true, jquery: true */
-/* global Meteor, ReactiveVar, Template, Iron, Router, Items */
+/* global Meteor, ReactiveVar, Template, Iron, Router, moment, Items, ItemPrices */
 'use strict';
 
 Template.Items.events({
@@ -69,7 +69,7 @@ Template.ItemsNew.events({
       userId: Meteor.userId(),
       code: code,
       description: description,
-      price: price,
+      price: price * 100,
       active: true
     });
 
@@ -96,9 +96,113 @@ Template.ItemsNew.events({
   }
 });
 
-Template.InvoicesShow.helpers({
+Template.ItemsShow.helpers({
   item: function() {
     var id = Iron.controller().params._id;
     return Items.findOne(id);
+  }
+});
+
+Template.itemPrices.events({
+  'click #item_prices_new_item_price': function() {
+    var itemId = Iron.controller().params._id;
+      ItemPrices.insert({
+      itemId: itemId,
+      untilDate: moment().format('YYYY-MM-DD'),
+      price: 0
+    });
+  }
+});
+
+Template.itemPrices.helpers({
+  item: function() {
+    return Template.currentData();
+  },
+  prices: function() {
+    var id = Iron.controller().params._id;
+    return ItemPrices.find({itemId: id});
+  }
+});
+
+Template.itemPrice.onCreated(function() {
+  var untilToday = (Template.currentData().untilDate === moment().format('YYYY-MM-DD'));
+  this.editing = new ReactiveVar(untilToday);
+  this.priceError = new ReactiveVar('');
+  this.untilDateError = new ReactiveVar('');
+});
+
+Template.itemPrice.onRendered(function() {
+  $('#item_price_until_date_' + Template.currentData()._id).datepicker({
+    format: "yyyy-mm-dd",
+    orientation: "top auto"
+  });
+});
+
+Template.itemPrice.events({
+  'click .item_price_edit_item_price': function(event, template) {
+    template.editing.set(true);
+
+    Meteor.setTimeout((function(id) {
+      return function() {
+        $('#item_price_until_date_' + id).datepicker({
+          format: "yyyy-mm-dd",
+          orientation: "top auto"
+        });
+      };
+    }(template.data._id)), 100);
+  },
+  'click .item_price_edit_done': function(event, template) {
+    var error = false;
+    var id = Template.currentData()._id;
+    var untilDate = template.find('#item_price_until_date_' + id).value;
+    var price = template.find('#item_price_price_' + id).value;
+
+    if (untilDate === null || untilDate.length === 0) {
+      template.untilDateError.set('Until date is required');
+      error = true;
+    } else if (!moment(untilDate, 'YYYY-MM-DD').isValid()) {
+      template.untilDateError.set('Until date is not valid');
+      error = true;
+    } else {
+      template.untilDateError.set('');
+    }
+
+    if (price === null || price.length === 0) {
+      template.priceError.set('Price is required and must be numeric');
+      error = true;
+    } else if (!$.isNumeric(price)) {
+      template.priceError.set('Price must be numeric');
+      error = true;
+    } else {
+      template.priceError.set('');
+    }
+
+    if (error) return;
+
+    ItemPrices.update({
+      _id: id
+    }, {
+      $set: {
+        untilDate: untilDate,
+        price: price * 100
+      }
+    });
+
+    template.editing.set(false);
+  }
+});
+
+Template.itemPrice.helpers({
+  isEditing: function() {
+    return Template.instance().editing.get();
+  },
+  priceError: function() {
+    return Template.instance().priceError.get();
+  },
+  untilDateError: function() {
+    return Template.instance().untilDateError.get();
+  },
+  price: function() {
+    return Template.currentData().price / 100;
   }
 });
