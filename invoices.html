@@ -1,12 +1,18 @@
 <template name="InvoicesNew">
   <form>
-    <div class="form-group">
-      <label for="new_invoice_daterange">Date Range</label>
-      <div class="input-daterange input-group" id="new_invoice_daterange">
-        <input id="new_invoice_period_start" type="text" class="form-control" name="start" value="{{start}}"/>
+    <div class="form-group {{hasError startError}} {{hasError endError}}">
+      <label for="invoices_new_daterange">Date Range</label>
+      <div class="input-daterange input-group" id="invoices_new_daterange">
+        <input id="invoices_new_start" type="text" class="form-control" name="start" value="{{start}}"/>
         <span class="input-group-addon">to</span>
-        <input id="new_invoice_period_end" type="text" class="form-control" name="end" value="{{end}}" />
+        <input id="invoices_new_end" type="text" class="form-control" name="end" value="{{end}}" />
       </div>
+      {{#if startError}}
+        <p class="help-block">{{startError}}</p>
+      {{/if}}
+      {{#if endError}}
+        <p class="help-block">{{endError}}</p>
+      {{/if}}
     </div>
     <button id="invoices_new_create_invoice" class="btn btn-primary" type="button">create</button>
     <button id="invoices_new_cancel" class="btn btn-default" type="button">cancel</button>
@@ -61,7 +67,7 @@
   <li class="list-group-item">
     {{#if isEditing}}
       <div class="list-item-btn-group pull-right">
-        <button id="invoice_item_edit_done" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ok"></span></button>
+        <button id="invoice_item_edit_done_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_done"><span class="glyphicon glyphicon-ok"></span></button>
       </div>
       <div class="row form-inline">
         <div class="col-md-1">
@@ -99,7 +105,7 @@
       {{/unless}}
     {{else}}
       <div class="list-item-btn-group pull-right">
-        <button id="invoice_item_edit_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button id="invoice_item_edit_invoice_item_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_invoice_item"><span class="glyphicon glyphicon-pencil"></span></button>
       </div>
       {{#if itemId}}
         <div class="row">
