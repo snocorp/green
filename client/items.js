@@ -14,22 +14,16 @@ Template.Items.helpers({
   }
 });
 
+Template.item.helpers({
+  price: function() {
+    return Template.currentData().price / 100;
+  }
+});
+
 Template.ItemsNew.onCreated(function() {
   this.codeError = new ReactiveVar('');
   this.descriptionError = new ReactiveVar('');
   this.priceError = new ReactiveVar('');
-});
-
-Template.ItemsNew.helpers({
-  codeError: function() {
-    return Template.instance().codeError.get();
-  },
-  descriptionError: function() {
-    return Template.instance().descriptionError.get();
-  },
-  priceError: function() {
-    return Template.instance().priceError.get();
-  }
 });
 
 Template.ItemsNew.events({
@@ -54,7 +48,7 @@ Template.ItemsNew.events({
     }
 
     if (price === null || price.length === 0) {
-      template.priceError.set('is required');
+      template.priceError.set('is required and must be numeric');
       error = true;
     } else if (!$.isNumeric(price)) {
       template.priceError.set('must be numeric');
@@ -96,6 +90,121 @@ Template.ItemsNew.events({
   }
 });
 
+Template.ItemsNew.helpers({
+  codeError: function() {
+    return Template.instance().codeError.get();
+  },
+  descriptionError: function() {
+    return Template.instance().descriptionError.get();
+  },
+  priceError: function() {
+    return Template.instance().priceError.get();
+  }
+});
+
+Template.ItemsEdit.onCreated(function() {
+  this.codeError = new ReactiveVar('');
+  this.descriptionError = new ReactiveVar('');
+  this.priceError = new ReactiveVar('');
+});
+
+Template.ItemsEdit.events({
+  'click #items_edit_update_item': function(event, template) {
+    var error = false;
+    var code = template.find('#items_edit_code').value;
+    var description = template.find('#items_edit_description').value;
+    var price = template.find('#items_edit_price').value;
+
+    if (code === null || code.length === 0) {
+      template.codeError.set('is required');
+      error = true;
+    } else {
+      template.codeError.set('');
+    }
+
+    if (description === null || description.length === 0) {
+      template.descriptionError.set('is required');
+      error = true;
+    } else {
+      template.descriptionError.set('');
+    }
+
+    if (price === null || price.length === 0) {
+      template.priceError.set('is required and must be numeric');
+      error = true;
+    } else if (!$.isNumeric(price)) {
+      template.priceError.set('must be numeric');
+      error = true;
+    } else {
+      template.priceError.set('');
+    }
+
+    if (error) return;
+
+    var id = Iron.controller().params._id;
+    Items.update({
+      _id: id
+    }, {
+      $set: {
+        userId: Meteor.userId(),
+        code: code,
+        description: description,
+        price: price * 100,
+        active: true
+      }
+    });
+
+    var params = Iron.controller().params;
+    if (params.query.route) {
+      var route = params.query.route;
+      delete params.query.route;
+
+      Router.go(route, params.query);
+    } else {
+      Router.go('items.show', {_id: id});
+    }
+  },
+  'click #items_edit_cancel': function(event, template) {
+    var id = Iron.controller().params._id;
+    Router.go('items.show', {_id: id});
+  }
+});
+
+Template.ItemsEdit.helpers({
+  item: function() {
+    var id = Iron.controller().params._id;
+    return Items.findOne(id);
+  },
+  price: function() {
+    var id = Iron.controller().params._id;
+    var item = Items.findOne(id);
+    if (item) {
+      return (item.price / 100).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+});
+
+Template.ItemsEdit.helpers({
+  codeError: function() {
+    return Template.instance().codeError.get();
+  },
+  descriptionError: function() {
+    return Template.instance().descriptionError.get();
+  },
+  priceError: function() {
+    return Template.instance().priceError.get();
+  }
+});
+
+Template.ItemsShow.events({
+  'click #items_show_edit_item': function() {
+    var id = Iron.controller().params._id;
+    Router.go('items.edit', {_id: id});
+  }
+});
+
 Template.ItemsShow.helpers({
   item: function() {
     var id = Iron.controller().params._id;
@@ -118,9 +227,14 @@ Template.itemPrices.helpers({
   item: function() {
     return Template.currentData();
   },
+  price: function() {
+    return Template.currentData().price / 100;
+  },
   prices: function() {
     var id = Iron.controller().params._id;
-    return ItemPrices.find({itemId: id});
+    return ItemPrices.find({itemId: id}, {
+      sort: { untilDate : -1 }
+    });
   }
 });
 

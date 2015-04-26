@@ -14,9 +14,9 @@ Template.registerHelper('selectedIfEquals', function(a, b) {
   return (a === b) ? 'selected' : '';
 });
 
-Template.registerHelper('priceOf', function(item) {
-  if (item) {
-    return '$' + (item.price / 100).toFixed(2);
+Template.registerHelper('fmtPrice', function(price) {
+  if (price) {
+    return '$' + price.toFixed(2);
   } else {
     return false;
   }
