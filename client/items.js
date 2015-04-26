@@ -3,7 +3,7 @@
 'use strict';
 
 Template.Items.events({
-  'click #new_item': function() {
+  'click #items_new_item': function() {
     Router.go('items.new');
   }
 });

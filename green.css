@@ -15,7 +15,14 @@
   margin-bottom: 0;
   text-align: right;
   font-size: 40px;
+}
+
+.floating-action span {
   cursor: pointer;
+}
+
+.floating-action span:hover {
+  color: #ccc;
 }
 
 .jumbotron-icon {
