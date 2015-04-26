@@ -127,10 +127,17 @@
         {{> itemPrice}}
       {{/each}}
     {{else}}
+      {{#if active}}
       <li class="list-group-item">
         To create a historic price click the <span class="glyphicon glyphicon-plus"></span> above.
       </li>
+      {{/if}}
     {{/if}}
+    {{#unless active}}
+      <li class="list-group-item">
+        To reactivate the item click the <span class="glyphicon glyphicon-pencil"></span> above and update the item.
+      </li>
+    {{/unless}}
   </ul>
 </template>
 

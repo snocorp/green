@@ -150,7 +150,6 @@ Template.ItemsEdit.events({
       _id: id
     }, {
       $set: {
-        userId: Meteor.userId(),
         code: code,
         description: description,
         price: price * 100,
