@@ -3,7 +3,6 @@
 'use strict';
 
 Template.registerHelper('isArchived', function(item) {
-  console.log(item);
   if (item && !item.active) {
     return 'archived';
   } else {
