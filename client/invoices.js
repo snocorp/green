@@ -1,6 +1,6 @@
 /* jshint node: true, jquery: true */
 /* global Meteor, ReactiveVar, Session, Template, Iron, Router, moment,
-          Invoices, InvoiceItems, Items */
+          Invoices, InvoiceItems, Items, ItemPrices */
 'use strict';
 
 var date = moment().format('YYYY-MM-DD');
@@ -46,6 +46,8 @@ Template.InvoicesNew.events({
     var error = false;
     var start = template.find('#invoices_new_start').value;
     var end = template.find('#invoices_new_end').value;
+    var company = template.find('#invoices_new_company').value;
+    var customer = template.find('#invoices_new_customer').value;
 
     if (start === null || start.length === 0) {
       template.startError.set('Start date is required');
@@ -73,6 +75,8 @@ Template.InvoicesNew.events({
       userId: Meteor.userId(),
       start: start,
       end: end,
+      company: company,
+      customer: customer,
       active: true
     });
 
@@ -99,6 +103,7 @@ Template.InvoicesNew.helpers({
 });
 
 Template.InvoicesEdit.onCreated(function() {
+  this.customerError = new ReactiveVar('');
   this.startError = new ReactiveVar('');
   this.endError = new ReactiveVar('');
 });
@@ -115,6 +120,8 @@ Template.InvoicesEdit.events({
     var error = false;
     var start = template.find('#invoices_edit_start').value;
     var end = template.find('#invoices_edit_end').value;
+    var company = template.find('#invoices_edit_company').value;
+    var customer = template.find('#invoices_edit_customer').value;
 
     if (start === null || start.length === 0) {
       template.startError.set('Start date is required');
@@ -145,6 +152,8 @@ Template.InvoicesEdit.events({
       $set: {
         start: start,
         end: end,
+        company: company,
+        customer: customer,
         active: true
       }
     });
@@ -287,5 +296,37 @@ Template.invoiceItem.helpers({
     }
 
     return description;
+  },
+  price: function() {
+    var invoiceId, itemId, price, invoice, item, itemPrices;
+
+    itemId = Template.currentData().itemId;
+    price = null;
+
+    if (itemId) {
+      invoiceId = Template.currentData().invoiceId;
+      invoice = Invoices.findOne(invoiceId);
+      item = Items.findOne(itemId);
+      price = item.price;
+
+      itemPrices = ItemPrices.find({
+        itemId: itemId,
+        untilDate: {$gte: invoice.end}
+      }, {
+        sort: {
+          untilDate: -1
+        }
+      }).fetch();
+
+      if (itemPrices.length > 0) {
+        price = itemPrices[0].price;
+      }
+    }
+
+    if (price) {
+      price = Template.currentData().quantity * price / 100;
+    }
+
+    return price;
   }
 });

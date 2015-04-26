@@ -14,6 +14,24 @@
         <p class="help-block">{{endError}}</p>
       {{/if}}
     </div>
+    <div class="form-group {{hasError companyError}}">
+      <label for="invoices_edit_company">Company</label>
+      <textarea id="invoices_edit_company" class="form-control" rows="4">{{invoice.company}}</textarea>
+      {{#if companyError}}
+        <p class="help-block">{{companyError}}</p>
+      {{else}}
+        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError customerError}}">
+      <label for="invoices_edit_customer">Customer</label>
+      <textarea id="invoices_edit_customer" class="form-control" rows="4">{{invoice.customer}}</textarea>
+      {{#if customerError}}
+        <p class="help-block">{{customerError}}</p>
+      {{else}}
+        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+      {{/if}}
+    </div>
     <button id="invoices_edit_update_invoice" class="btn btn-primary" type="button">update</button>
     <button id="invoices_edit_cancel" class="btn btn-default" type="button">cancel</button>
   </form>
@@ -33,6 +51,24 @@
       {{/if}}
       {{#if endError}}
         <p class="help-block">{{endError}}</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError companyError}}">
+      <label for="invoices_new_company">Company</label>
+      <textarea id="invoices_new_company" class="form-control" rows="4"></textarea>
+      {{#if companyError}}
+        <p class="help-block">{{companyError}}</p>
+      {{else}}
+        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError customerError}}">
+      <label for="invoices_new_customer">Customer</label>
+      <textarea id="invoices_new_customer" class="form-control" rows="4"></textarea>
+      {{#if customerError}}
+        <p class="help-block">{{customerError}}</p>
+      {{else}}
+        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
       {{/if}}
     </div>
     <button id="invoices_new_create_invoice" class="btn btn-primary" type="button">create</button>
@@ -69,6 +105,14 @@
       {{/if}}
     </div>
   </h2>
+  <div class="row">
+    <div class="col-sm-9">
+      {{#markdown}}{{invoice.customer}}{{/markdown}}
+    </div>
+    <div class="col-sm-3">
+      {{#markdown}}{{invoice.company}}{{/markdown}}
+    </div>
+  </div>
   {{> invoiceItems invoice}}
 </template>
 
@@ -158,6 +202,9 @@
           </div>
           <div class="col-sm-1">
             {{quantity}}
+          </div>
+          <div class="col-sm-3 text-right">
+            {{fmtPrice price}}
           </div>
         </div>
       {{else}}
