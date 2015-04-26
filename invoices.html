@@ -1,3 +1,24 @@
+<template name="InvoicesEdit">
+  <form>
+    <div class="form-group {{hasError startError}} {{hasError endError}}">
+      <label for="invoices_edit_daterange">Date Range</label>
+      <div class="input-daterange input-group" id="invoices_edit_daterange">
+        <input id="invoices_edit_start" type="text" class="form-control" name="start" value="{{invoice.start}}"/>
+        <span class="input-group-addon">to</span>
+        <input id="invoices_edit_end" type="text" class="form-control" name="end" value="{{invoice.end}}" />
+      </div>
+      {{#if startError}}
+        <p class="help-block">{{startError}}</p>
+      {{/if}}
+      {{#if endError}}
+        <p class="help-block">{{endError}}</p>
+      {{/if}}
+    </div>
+    <button id="invoices_edit_update_invoice" class="btn btn-primary" type="button">update</button>
+    <button id="invoices_edit_cancel" class="btn btn-default" type="button">cancel</button>
+  </form>
+</template>
+
 <template name="InvoicesNew">
   <form>
     <div class="form-group {{hasError startError}} {{hasError endError}}">
@@ -35,31 +56,52 @@
 </template>
 
 <template name="invoice">
-  <a href="{{pathFor route='invoices.show'}}" class="list-group-item">{{start}} - {{end}}</a>
+  <a href="{{pathFor route='invoices.show'}}" class="list-group-item {{isArchived this}}">{{start}} - {{end}}</a>
 </template>
 
 <template name="InvoicesShow">
-  <h2>{{invoice.start}} - {{invoice.end}}</h2>
-  {{> invoiceItems}}
+  <h2>
+    {{invoice.start}} - {{invoice.end}}
+    <div class="btn-group pull-right">
+      <button id="invoices_show_edit_invoice" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button>
+      {{#if invoice.active}}
+        <button id="invoices_show_remove_invoice" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>
+      {{/if}}
+    </div>
+  </h2>
+  {{> invoiceItems invoice}}
 </template>
 
 <template name="invoiceItems">
   <ul class="list-group">
-    <li class="list-group-item active">
-      <div class="list-item-btn-group pull-right">
-        <button id="invoice_items_new_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
-      </div>
-      Items
-    </li>
+    {{#if active}}
+      <li class="list-group-item active">
+        <div class="list-item-btn-group pull-right">
+          <button id="invoice_items_new_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        Items
+      </li>
+    {{else}}
+      <li class="list-group-item disabled">
+        Items
+      </li>
+    {{/if}}
     {{#if items.count}}
       {{#each items}}
         {{> invoiceItem}}
       {{/each}}
     {{else}}
-      <li class="list-group-item">
-        To create an invoice item click the <span class="glyphicon glyphicon-plus"></span> above.
-      </li>
+      {{#if active}}
+        <li class="list-group-item">
+          To create an invoice item click the <span class="glyphicon glyphicon-plus"></span> above.
+        </li>
+      {{/if}}
     {{/if}}
+    {{#unless active}}
+      <li class="list-group-item">
+        To reactivate the invoice click the <span class="glyphicon glyphicon-pencil"></span> above and update the invoice.
+      </li>
+    {{/unless}}
   </ul>
 </template>
 
@@ -104,9 +146,11 @@
         </div>
       {{/unless}}
     {{else}}
-      <div class="list-item-btn-group pull-right">
-        <button id="invoice_item_edit_invoice_item_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_invoice_item"><span class="glyphicon glyphicon-pencil"></span></button>
-      </div>
+      {{#if ../active}}
+        <div class="list-item-btn-group pull-right">
+          <button id="invoice_item_edit_invoice_item_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_invoice_item"><span class="glyphicon glyphicon-pencil"></span></button>
+        </div>
+      {{/if}}
       {{#if itemId}}
         <div class="row">
           <div class="col-sm-3">

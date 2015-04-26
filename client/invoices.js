@@ -15,13 +15,24 @@ Template.Invoices.events({
 
 Template.Invoices.helpers({
   invoices: function() {
-    return Invoices.find({userId: Meteor.userId()});
+    return Invoices.find({userId: Meteor.userId()}, {
+      sort: {
+        start: -1
+      }
+    });
   }
 });
 
 Template.InvoicesNew.onCreated(function() {
   this.startError = new ReactiveVar('');
   this.endError = new ReactiveVar('');
+});
+
+Template.InvoicesNew.onRendered(function() {
+  $('#invoices_new_daterange').datepicker({
+    format: "yyyy-mm-dd",
+    orientation: "top auto"
+  });
 });
 
 Template.InvoicesNew.events({
@@ -61,7 +72,8 @@ Template.InvoicesNew.events({
     var id = Invoices.insert({
       userId: Meteor.userId(),
       start: start,
-      end: end
+      end: end,
+      active: true
     });
 
     Router.go('invoices.show', {_id: id});
@@ -86,17 +98,101 @@ Template.InvoicesNew.helpers({
   }
 });
 
-Template.InvoicesNew.onRendered(function() {
-  $('#invoices_new_daterange').datepicker({
+Template.InvoicesEdit.onCreated(function() {
+  this.startError = new ReactiveVar('');
+  this.endError = new ReactiveVar('');
+});
+
+Template.InvoicesEdit.onRendered(function() {
+  $('#invoices_edit_daterange').datepicker({
     format: "yyyy-mm-dd",
     orientation: "top auto"
   });
+});
+
+Template.InvoicesEdit.events({
+  'click #invoices_edit_update_invoice': function(event, template) {
+    var error = false;
+    var start = template.find('#invoices_edit_start').value;
+    var end = template.find('#invoices_edit_end').value;
+
+    if (start === null || start.length === 0) {
+      template.startError.set('Start date is required');
+      error = true;
+    } else if (!moment(start, 'YYYY-MM-DD').isValid()) {
+      template.startError.set('Start date is not valid');
+      error = true;
+    } else {
+      template.startError.set('');
+    }
+
+    if (end === null || end.length === 0) {
+      template.endError.set('End date is required');
+      error = true;
+    } else if (!moment(end, 'YYYY-MM-DD').isValid()) {
+      template.endError.set('End date is not valid');
+      error = true;
+    } else {
+      template.endError.set('');
+    }
+
+    if (error) return;
+
+    var id = Iron.controller().params._id;
+    Invoices.update({
+      _id: id
+    }, {
+      $set: {
+        start: start,
+        end: end,
+        active: true
+      }
+    });
+
+    Router.go('invoices.show', {_id: id});
+  },
+  'click #invoices_edit_cancel': function(event, template) {
+    console.log('cancel');
+
+    var id = Iron.controller().params._id;
+    Router.go('invoices.show', {_id: id});
+  }
+});
+
+Template.InvoicesEdit.helpers({
+  startError: function() {
+    return Template.instance().startError.get();
+  },
+  endError: function() {
+    return Template.instance().endError.get();
+  },
+  invoice: function() {
+    var id = Iron.controller().params._id;
+    return Invoices.findOne(id);
+  }
 });
 
 Template.InvoicesShow.helpers({
   invoice: function() {
     var id = Iron.controller().params._id;
     return Invoices.findOne(id);
+  }
+});
+
+Template.InvoicesShow.events({
+  'click #invoices_show_edit_invoice': function(event, template) {
+    var id = Iron.controller().params._id;
+    Router.go('invoices.edit', {_id: id});
+  },
+  'click #invoices_show_remove_invoice': function() {
+    var id = Iron.controller().params._id;
+    Invoices.update({
+      _id: id
+    }, {
+      $set: {
+        active: false
+      }
+    });
   }
 });
 
