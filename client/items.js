@@ -10,7 +10,11 @@ Template.Items.events({
 
 Template.Items.helpers({
   items: function() {
-    return Items.find({});
+    return Items.find({}, {
+      sort: {
+        code: 1
+      }
+    });
   }
 });
 
@@ -202,6 +206,16 @@ Template.ItemsShow.events({
   'click #items_show_edit_item': function() {
     var id = Iron.controller().params._id;
     Router.go('items.edit', {_id: id});
+  },
+  'click #items_show_remove_item': function() {
+    var id = Iron.controller().params._id;
+    Items.update({
+      _id: id
+    }, {
+      $set: {
+        active: false
+      }
+    });
   }
 });
 
@@ -228,7 +242,12 @@ Template.itemPrices.helpers({
     return Template.currentData();
   },
   price: function() {
-    return Template.currentData().price / 100;
+    var item = Template.currentData();
+    if (item) {
+      return item.price / 100;
+    } else {
+      return false;
+    }
   },
   prices: function() {
     var id = Iron.controller().params._id;
@@ -264,6 +283,10 @@ Template.itemPrice.events({
         });
       };
     }(template.data._id)), 100);
+  },
+  'click .item_price_remove_item_price': function(event, template) {
+    var id = template.data._id;
+    ItemPrices.remove(id);
   },
   'click .item_price_edit_done': function(event, template) {
     var error = false;

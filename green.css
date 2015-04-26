@@ -30,3 +30,7 @@
 .row-hint {
   margin-top: 5px;
 }
+
+.archived {
+  color: #ddd !important;
+}

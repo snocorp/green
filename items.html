@@ -70,7 +70,7 @@
 </template>
 
 <template name="item">
-  <a href="{{pathFor route='items.show'}}" class="list-group-item">
+  <a href="{{pathFor route='items.show'}}" class="list-group-item {{isArchived this}}">
     <div class="row">
       <div class="col-sm-1">
         {{code}}
@@ -88,19 +88,30 @@
 <template name="ItemsShow">
   <h2>
     {{item.code}}: {{item.description}}
-    <button id="items_show_edit_item" class="btn btn-default pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
+    <div class="btn-group pull-right">
+      <button id="items_show_edit_item" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button>
+      {{#if item.active}}
+        <button id="items_show_remove_item" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>
+      {{/if}}
+    </div>
   </h2>
   {{> itemPrices item}}
 </template>
 
 <template name="itemPrices">
   <ul class="list-group">
-    <li class="list-group-item active">
-      <div class="list-item-btn-group pull-right">
-        <button id="item_prices_new_item_price" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
-      </div>
-      Prices
-    </li>
+    {{#if active}}
+      <li class="list-group-item active">
+        <div class="list-item-btn-group pull-right">
+          <button id="item_prices_new_item_price" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        Prices
+      </li>
+    {{else}}
+      <li class="list-group-item disabled">
+        Prices
+      </li>
+    {{/if}}
     <li class="list-group-item">
       <div class="row">
         <div class="col-sm-2">
@@ -158,9 +169,12 @@
         </div>
       {{/if}}
     {{else}}
-      <div class="list-item-btn-group pull-right">
-        <button id="item_price_edit_item_price_{{_id}}" type="button" class="btn btn-default btn-sm item_price_edit_item_price"><span class="glyphicon glyphicon-pencil"></span></button>
-      </div>
+      {{#if ../active}}
+        <div class="list-item-btn-group pull-right">
+          <button id="item_price_edit_item_price_{{_id}}" type="button" class="btn btn-default btn-sm item_price_edit_item_price"><span class="glyphicon glyphicon-pencil"></span></button>
+          <button id="item_price_remove_item_price_{{_id}}" type="button" class="btn btn-default btn-sm item_price_remove_item_price"><span class="glyphicon glyphicon-trash"></span></button>
+        </div>
+      {{/if}}
       <div class="row">
         <div class="col-sm-3">
           {{untilDate}}

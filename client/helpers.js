@@ -2,6 +2,15 @@
 /* global Template */
 'use strict';
 
+Template.registerHelper('isArchived', function(item) {
+  console.log(item);
+  if (item && !item.active) {
+    return 'archived';
+  } else {
+    return false;
+  }
+});
+
 Template.registerHelper('hasError', function(error) {
   return (
     error !== null &&
@@ -18,6 +27,6 @@ Template.registerHelper('fmtPrice', function(price) {
   if (price) {
     return '$' + price.toFixed(2);
   } else {
-    return false;
+    return '$0.00';
   }
 });
