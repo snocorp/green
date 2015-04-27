@@ -48,6 +48,9 @@ Template.InvoicesNew.events({
     var end = template.find('#invoices_new_end').value;
     var company = template.find('#invoices_new_company').value;
     var customer = template.find('#invoices_new_customer').value;
+    var services = template.find('#invoices_new_services').value;
+    var terms = template.find('#invoices_new_terms').value;
+    var percentage = template.find('#invoices_new_percentage').value;
 
     if (start === null || start.length === 0) {
       template.startError.set('Start date is required');
@@ -77,6 +80,9 @@ Template.InvoicesNew.events({
       end: end,
       company: company,
       customer: customer,
+      services: services,
+      terms: terms,
+      percentage: percentage,
       active: true
     });
 
@@ -122,6 +128,9 @@ Template.InvoicesEdit.events({
     var end = template.find('#invoices_edit_end').value;
     var company = template.find('#invoices_edit_company').value;
     var customer = template.find('#invoices_edit_customer').value;
+    var services = template.find('#invoices_edit_services').value;
+    var terms = template.find('#invoices_edit_terms').value;
+    var percentage = template.find('#invoices_edit_percentage').value;
 
     if (start === null || start.length === 0) {
       template.startError.set('Start date is required');
@@ -154,6 +163,9 @@ Template.InvoicesEdit.events({
         end: end,
         company: company,
         customer: customer,
+        services: services,
+        terms: terms,
+        percentage: percentage,
         active: true
       }
     });
@@ -185,6 +197,15 @@ Template.InvoicesShow.helpers({
   invoice: function() {
     var id = Iron.controller().params._id;
     return Invoices.findOne(id);
+  },
+  termsClass: function() {
+    var id = Iron.controller().params._id;
+    var invoice = Invoices.findOne(id);
+    if (invoice) {
+      return invoice.active ? 'active' : 'disabled';
+    } else {
+      return false;
+    }
   }
 });
 
@@ -220,6 +241,37 @@ Template.invoiceItems.helpers({
   items: function() {
     var id = Iron.controller().params._id;
     return InvoiceItems.find({invoiceId: id});
+  },
+  totalPrice: function() {
+    var id = Iron.controller().params._id;
+    var invoiceItems = InvoiceItems.find({invoiceId: id});
+    var total = 0;
+
+    invoiceItems.forEach(function(invoiceItem, index) {
+      var item = Items.findOne(invoiceItem.itemId);
+      var price = item.price;
+
+      var itemPrices = ItemPrices.find({
+        itemId: invoiceItem.itemId,
+        untilDate: {$gte: Template.currentData().end}
+      }, {
+        sort: {
+          untilDate: -1
+        }
+      }).fetch();
+
+      if (itemPrices.length > 0) {
+        price = itemPrices[0].price;
+      }
+
+      if (price) {
+        price = invoiceItem.quantity * price;
+      }
+
+      total += price;
+    });
+
+    return total / 100;
   }
 });
 
@@ -275,7 +327,11 @@ Template.invoiceItem.helpers({
     return Template.instance().quantityError.get();
   },
   items: function() {
-    return Items.find({userId: Meteor.userId()});
+    return Items.find({userId: Meteor.userId()}, {
+      sort: {
+        code: 1
+      }
+    });
   },
   itemCode: function() {
     var itemId = Template.currentData().itemId,
@@ -325,6 +381,38 @@ Template.invoiceItem.helpers({
 
     if (price) {
       price = Template.currentData().quantity * price / 100;
+    }
+
+    return price;
+  },
+  itemPrice: function() {
+    var invoiceId, itemId, price, invoice, item, itemPrices;
+
+    itemId = Template.currentData().itemId;
+    price = null;
+
+    if (itemId) {
+      invoiceId = Template.currentData().invoiceId;
+      invoice = Invoices.findOne(invoiceId);
+      item = Items.findOne(itemId);
+      price = item.price;
+
+      itemPrices = ItemPrices.find({
+        itemId: itemId,
+        untilDate: {$gte: invoice.end}
+      }, {
+        sort: {
+          untilDate: -1
+        }
+      }).fetch();
+
+      if (itemPrices.length > 0) {
+        price = itemPrices[0].price;
+      }
+    }
+
+    if (price) {
+      price = price / 100;
     }
 
     return price;

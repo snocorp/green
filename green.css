@@ -5,6 +5,16 @@
   }
 }
 
+.visible-print-table-row {
+  display: none;
+}
+
+@media print {
+  .visible-print-table-row {
+    display: table-row;
+  }
+}
+
 .floating-action {
   position: fixed;
   padding-right: 15px;
@@ -40,4 +50,34 @@
 
 .archived {
   color: #ddd !important;
+}
+
+.invoice-header {
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+.invoice-terms {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.invoice-items {
+  width: 100%
+}
+
+tr.list-group-item > td {
+  display: block;
+}
+
+.invoice-terms th,
+.invoice-terms td,
+.invoice-items th,
+.invoice-items td {
+  padding: 3px;
+  border: 1px solid #999;
+}
+
+.invoice-items .price {
+  text-align: right;
 }
