@@ -74,19 +74,23 @@ Template.InvoicesNew.events({
 
     if (error) return;
 
-    var id = Invoices.insert({
-      userId: Meteor.userId(),
-      start: start,
-      end: end,
-      company: company,
-      customer: customer,
-      services: services,
-      terms: terms,
-      percentage: percentage,
-      active: true
-    });
+    Meteor.call(
+      'createInvoice',
+      {
+        start: start,
+        end: end,
+        company: company,
+        customer: customer,
+        services: services,
+        terms: terms,
+        percentage: percentage
+      },
+      function(error, result) {
+        if (error) return;
 
-    Router.go('invoices.show', {_id: id});
+        Router.go('invoices.show', {_id: result.id});
+      }
+    );
   },
   'click #invoices_new_cancel': function(event, template) {
     Router.go('invoices');
@@ -155,26 +159,26 @@ Template.InvoicesEdit.events({
     if (error) return;
 
     var id = Iron.controller().params._id;
-    Invoices.update({
-      _id: id
-    }, {
-      $set: {
+    Meteor.call(
+      'updateInvoice',
+      id,
+      {
         start: start,
         end: end,
         company: company,
         customer: customer,
         services: services,
         terms: terms,
-        percentage: percentage,
-        active: true
-      }
-    });
+        percentage: percentage
+      },
+      function(error, result) {
+        if (error) return;
 
-    Router.go('invoices.show', {_id: id});
+        Router.go('invoices.show', {_id: id});
+      }
+    );
   },
   'click #invoices_edit_cancel': function(event, template) {
-    console.log('cancel');
-
     var id = Iron.controller().params._id;
     Router.go('invoices.show', {_id: id});
   }
@@ -216,24 +220,14 @@ Template.InvoicesShow.events({
   },
   'click #invoices_show_remove_invoice': function() {
     var id = Iron.controller().params._id;
-    Invoices.update({
-      _id: id
-    }, {
-      $set: {
-        active: false
-      }
-    });
+    Meteor.call('archiveInvoice', id);
   }
 });
 
 Template.invoiceItems.events({
   'click #invoice_items_new_invoice_item': function() {
     var invoiceId = Iron.controller().params._id;
-    InvoiceItems.insert({
-      invoiceId: invoiceId,
-      itemId: null,
-      quantity: 0
-    });
+    Meteor.call('createInvoiceItem', invoiceId);
   }
 });
 
@@ -249,26 +243,28 @@ Template.invoiceItems.helpers({
 
     invoiceItems.forEach(function(invoiceItem, index) {
       var item = Items.findOne(invoiceItem.itemId);
-      var price = item.price;
+      if (item) {
+        var price = item.price;
 
-      var itemPrices = ItemPrices.find({
-        itemId: invoiceItem.itemId,
-        untilDate: {$gte: Template.currentData().end}
-      }, {
-        sort: {
-          untilDate: -1
+        var itemPrices = ItemPrices.find({
+          itemId: invoiceItem.itemId,
+          untilDate: {$gte: Template.currentData().end}
+        }, {
+          sort: {
+            untilDate: -1
+          }
+        }).fetch();
+
+        if (itemPrices.length > 0) {
+          price = itemPrices[0].price;
         }
-      }).fetch();
 
-      if (itemPrices.length > 0) {
-        price = itemPrices[0].price;
+        if (price) {
+          price = invoiceItem.quantity * price;
+        }
+
+        total += price;
       }
-
-      if (price) {
-        price = invoiceItem.quantity * price;
-      }
-
-      total += price;
     });
 
     return total / 100;
@@ -303,16 +299,19 @@ Template.invoiceItem.events({
 
     if (error) return;
 
-    InvoiceItems.update({
-      _id: id
-    }, {
-      $set: {
+    Meteor.call(
+      'updateInvoiceItem',
+      id,
+      {
         itemId: item,
         quantity: quantity
-      }
-    });
+      },
+      function(error, result) {
+        if (error) return;
 
-    template.editing.set(false);
+        template.editing.set(false);
+      }
+    );
   },
   'click #invoice_item_new_item': function(event, template) {
     Router.go('items.new', {}, {query: "route=invoices.show&_id=" + encodeURIComponent(Iron.controller().params._id)});

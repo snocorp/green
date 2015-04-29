@@ -63,23 +63,28 @@ Template.ItemsNew.events({
 
     if (error) return;
 
-    var id = Items.insert({
-      userId: Meteor.userId(),
-      code: code,
-      description: description,
-      price: price * 100,
-      active: true
-    });
-
     var params = Iron.controller().params;
-    if (params.query.route) {
-      var route = params.query.route;
-      delete params.query.route;
 
-      Router.go(route, params.query);
-    } else {
-      Router.go('items.show', {_id: id});
-    }
+    Meteor.call(
+      'insertItem',
+      {
+        code: code,
+        description: description,
+        price: price * 100
+      },
+      function(error, result) {
+        if (error) return;
+
+        if (params.query.route) {
+          var route = params.query.route;
+          delete params.query.route;
+
+          Router.go(route, params.query);
+        } else {
+          Router.go('items.show', {_id: result.id});
+        }
+      }
+    );
   },
   'click #items_new_cancel': function(event, template) {
     var params = Iron.controller().params;
@@ -146,26 +151,26 @@ Template.ItemsEdit.events({
     if (error) return;
 
     var id = Iron.controller().params._id;
-    Items.update({
-      _id: id
-    }, {
-      $set: {
+    var params = Iron.controller().params;
+    Meteor.call(
+      'updateItem',
+      id,
+      {
         code: code,
         description: description,
-        price: price * 100,
-        active: true
+        price: price * 100
+      },
+      function(error, result) {
+        if (params.query.route) {
+          var route = params.query.route;
+          delete params.query.route;
+
+          Router.go(route, params.query);
+        } else {
+          Router.go('items.show', {_id: id});
+        }
       }
-    });
-
-    var params = Iron.controller().params;
-    if (params.query.route) {
-      var route = params.query.route;
-      delete params.query.route;
-
-      Router.go(route, params.query);
-    } else {
-      Router.go('items.show', {_id: id});
-    }
+    );
   },
   'click #items_edit_cancel': function(event, template) {
     var id = Iron.controller().params._id;
@@ -208,13 +213,7 @@ Template.ItemsShow.events({
   },
   'click #items_show_remove_item': function() {
     var id = Iron.controller().params._id;
-    Items.update({
-      _id: id
-    }, {
-      $set: {
-        active: false
-      }
-    });
+    Meteor.call('archiveItem', id);
   }
 });
 
@@ -228,11 +227,7 @@ Template.ItemsShow.helpers({
 Template.itemPrices.events({
   'click #item_prices_new_item_price': function() {
     var itemId = Iron.controller().params._id;
-      ItemPrices.insert({
-      itemId: itemId,
-      untilDate: moment().format('YYYY-MM-DD'),
-      price: 0
-    });
+    Meteor.call('createItemPrice', itemId);
   }
 });
 
@@ -285,7 +280,7 @@ Template.itemPrice.events({
   },
   'click .item_price_remove_item_price': function(event, template) {
     var id = template.data._id;
-    ItemPrices.remove(id);
+    Meteor.call('removeItemPrice', id);
   },
   'click .item_price_edit_done': function(event, template) {
     var error = false;
@@ -315,16 +310,21 @@ Template.itemPrice.events({
 
     if (error) return;
 
-    ItemPrices.update({
-      _id: id
-    }, {
-      $set: {
+    Meteor.call(
+      'updateItemPrice',
+      id,
+      {
         untilDate: untilDate,
         price: price * 100
-      }
-    });
+      },
+      function(error, result) {
+        if (error) return;
 
-    template.editing.set(false);
+        template.editing.set(false);
+      }
+    );
+
+
   }
 });
 
