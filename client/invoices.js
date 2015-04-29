@@ -281,9 +281,13 @@ Template.invoiceItem.events({
   'click .invoice_item_edit_invoice_item': function(event, template) {
     template.editing.set(true);
   },
+  'click .invoice_item_remove_invoice_item': function(event, template) {
+    var id = template.data._id;
+    Meteor.call('removeInvoiceItem', id);
+  },
   'click .invoice_item_edit_done': function(event, template) {
     var error = false;
-    var id = Template.currentData()._id;
+    var id = template.data._id;
     var item = template.find('#invoice_item_item_' + id).value;
     var quantity = template.find('#invoice_item_quantity_' + id).value;
 
@@ -326,7 +330,7 @@ Template.invoiceItem.helpers({
     return Template.instance().quantityError.get();
   },
   items: function() {
-    return Items.find({userId: Meteor.userId()}, {
+    return Items.find({userId: Meteor.userId(), active: true}, {
       sort: {
         code: 1
       }
