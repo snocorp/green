@@ -1,0 +1,86 @@
+<template name="CustomersEdit">
+  <form>
+    <div class="form-group {{hasError nameError}}">
+      <label for="customers_edit_code">Name</label>
+      <input id="customers_edit_code" class="form-control" type="text" value="{{customer.name}}" name="name" placeholder="eg. Zen Massage"/>
+      {{#if nameError}}
+        <p class="help-block">{{nameError}}</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError descriptionError}}">
+      <label for="customers_edit_description">Description</label>
+      <textarea id="customers_edit_description" class="form-control" type="text" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
+      {{#if descriptionError}}
+        <p class="help-block">{{descriptionError}}</p>
+      {{else}}
+        <p class="help-block">Description will be copied to the invoice when a customer is chosen.</p>
+      {{/if}}
+    </div>
+  </form>
+  <button id="customers_edit_update_customer" type="button" class="btn btn-primary">update</button>
+  <button id="customers_edit_cancel" type="button" class="btn btn-default">cancel</button>
+</template>
+
+<template name="CustomersNew">
+  <form>
+    <div class="form-group {{hasError nameError}}">
+      <label for="customers_new_name">Code</label>
+      <input id="customers_new_name" class="form-control" type="text" value="{{name}}" name="name" placeholder="eg. Zen Massage"/>
+      {{#if nameError}}
+        <p class="help-block">{{nameError}}</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError descriptionError}}">
+      <label for="customers_new_description">Description</label>
+      <textarea id="customers_edit_description" class="form-control" type="text" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
+      {{#if descriptionError}}
+        <p class="help-block">{{descriptionError}}</p>
+      {{else}}
+        <p class="help-block">Description will be copied to the invoice when a customer is chosen.</p>
+      {{/if}}
+    </div>
+  </form>
+  <button id="customers_new_create_customer" type="button" class="btn btn-primary">create</button>
+  <button id="customers_new_cancel" type="button" class="btn btn-default">cancel</button>
+</template>
+
+<template name="Customers">
+  <div class="floating-action"><span id="customers_new_customer" class="glyphicon glyphicon-plus-sign"></span></div>
+  {{#if customers.count}}
+    <div class="list-group">
+      {{#each customers}}
+        {{> customer}}
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="well">
+      To create your first customer click the <span class="glyphicon glyphicon-plus-sign"></span> at the bottom right.
+    </div>
+  {{/if}}
+</template>
+
+<template name="customer">
+  <a href="{{pathFor route='customers.show'}}" class="list-group-item {{isArchived this}}">
+    <div class="row">
+      <div class="col-sm-3">
+        {{name}}
+      </div>
+      <div class="col-sm-9">
+        {{#markdown}}{{description}}{{/markdown}}
+      </div>
+    </div>
+  </a>
+</template>
+
+<template name="CustomersShow">
+  <h2>
+    {{customer.name}}
+    <div class="btn-group pull-right">
+      <button id="customers_show_edit_customer" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button>
+      {{#if customer.active}}
+        <button id="customers_show_remove_customer" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>
+      {{/if}}
+    </div>
+  </h2>
+  {{#markdown}}{{customer.description}}{{/markdown}}
+</template>
