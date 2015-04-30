@@ -1,6 +1,6 @@
 /* jshint node: true, jquery: true */
 /* global Meteor, ReactiveVar, Session, Template, Iron, Router, moment,
-          Invoices, InvoiceItems, Items, ItemPrices */
+          Customers, Invoices, InvoiceItems, Items, ItemPrices */
 'use strict';
 
 var date = moment().format('YYYY-MM-DD');
@@ -94,6 +94,9 @@ Template.InvoicesNew.events({
   },
   'click #invoices_new_cancel': function(event, template) {
     Router.go('invoices');
+  },
+  'click .invoices_new_customer_option': function(event, template) {
+    template.find('#invoices_new_customer').value = this.description;
   }
 });
 
@@ -109,6 +112,13 @@ Template.InvoicesNew.helpers({
   },
   end: function() {
     return Session.get('invoices_new_end');
+  },
+  customers: function() {
+    return Customers.find({userId: Meteor.userId(), active: true}, {
+      sort: {
+        name: 1
+      }
+    });
   }
 });
 

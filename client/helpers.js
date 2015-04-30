@@ -18,6 +18,10 @@ Template.registerHelper('hasError', function(error) {
     ) ? 'has-error' : '';
 });
 
+Template.registerHelper('activeIf', function(condition) {
+  return condition ? 'active' : false;
+});
+
 Template.registerHelper('selectedIfEquals', function(a, b) {
   return (a === b) ? 'selected' : '';
 });

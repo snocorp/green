@@ -1,15 +1,15 @@
 <template name="CustomersEdit">
   <form>
     <div class="form-group {{hasError nameError}}">
-      <label for="customers_edit_code">Name</label>
-      <input id="customers_edit_code" class="form-control" type="text" value="{{customer.name}}" name="name" placeholder="eg. Zen Massage"/>
+      <label for="customers_edit_name">Name</label>
+      <input id="customers_edit_name" class="form-control" type="text" value="{{customer.name}}" name="name" placeholder="eg. Zen Massage"/>
       {{#if nameError}}
         <p class="help-block">{{nameError}}</p>
       {{/if}}
     </div>
     <div class="form-group {{hasError descriptionError}}">
       <label for="customers_edit_description">Description</label>
-      <textarea id="customers_edit_description" class="form-control" type="text" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
+      <textarea id="customers_edit_description" class="form-control" rows="4" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
       {{#if descriptionError}}
         <p class="help-block">{{descriptionError}}</p>
       {{else}}
@@ -32,7 +32,7 @@
     </div>
     <div class="form-group {{hasError descriptionError}}">
       <label for="customers_new_description">Description</label>
-      <textarea id="customers_edit_description" class="form-control" type="text" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
+      <textarea id="customers_new_description" class="form-control" rows="4" name="description">{{customer.description}}</textarea>
       {{#if descriptionError}}
         <p class="help-block">{{descriptionError}}</p>
       {{else}}
@@ -46,6 +46,12 @@
 
 <template name="Customers">
   <div class="floating-action"><span id="customers_new_customer" class="glyphicon glyphicon-plus-sign"></span></div>
+  <h2>
+    Customers
+    <div class="btn-group pull-right">
+      <button id="customers_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}"><span class="glyphicon glyphicon-folder-close"></span></button>
+    </div>
+  </h2>
   {{#if customers.count}}
     <div class="list-group">
       {{#each customers}}

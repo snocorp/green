@@ -79,6 +79,16 @@
     </div>
     <div class="form-group {{hasError customerError}}">
       <label for="invoices_new_customer">Customer</label>
+      <span class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-search"></span><span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          {{#each customers}}
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="invoices_new_customer_option">{{name}}</a></li>
+          {{/each}}
+        </ul>
+      </span>
       <textarea id="invoices_new_customer" class="form-control" rows="4"></textarea>
       {{#if customerError}}
         <p class="help-block">{{customerError}}</p>
@@ -108,6 +118,7 @@
 
 <template name="Invoices">
   <div class="floating-action"><span id="invoices_new_invoice" class="glyphicon glyphicon-plus-sign"></span></div>
+  <h2>Invoices</h2>
   {{#if invoices.count}}
     <div class="list-group">
       {{#each invoices}}
