@@ -2,19 +2,38 @@
 /* global Meteor, ReactiveVar, Template, Iron, Router, moment, Items, ItemPrices */
 'use strict';
 
+Template.Items.onCreated(function() {
+  this.displayArchived = new ReactiveVar(false);
+});
+
 Template.Items.events({
   'click #items_new_item': function() {
     Router.go('items.new');
+  },
+  'click #items_toggle_display_archived': function(event, template) {
+    var value = Template.instance().displayArchived.get();
+    Template.instance().displayArchived.set(!value);
   }
 });
 
 Template.Items.helpers({
   items: function() {
-    return Items.find({}, {
+    var selector = {
+      userId: Meteor.userId()
+    };
+
+    if (!Template.instance().displayArchived.get()) {
+      selector.active = true;
+    }
+    
+    return Items.find(selector, {
       sort: {
         code: 1
       }
     });
+  },
+  displayArchived: function() {
+    return Template.instance().displayArchived.get();
   }
 });
 

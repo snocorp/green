@@ -118,7 +118,12 @@
 
 <template name="Invoices">
   <div class="floating-action"><span id="invoices_new_invoice" class="glyphicon glyphicon-plus-sign"></span></div>
-  <h2>Invoices</h2>
+  <h2>
+    Invoices
+    <div class="btn-group pull-right">
+      <button id="invoices_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}"><span class="glyphicon glyphicon-folder-close"></span></button>
+    </div>
+  </h2>
   {{#if invoices.count}}
     <div class="list-group">
       {{#each invoices}}

@@ -7,19 +7,38 @@ var date = moment().format('YYYY-MM-DD');
 Session.set('invoices_new_start', date);
 Session.set('invoices_new_end', date);
 
+Template.Invoices.onCreated(function() {
+  this.displayArchived = new ReactiveVar(false);
+});
+
 Template.Invoices.events({
   'click #invoices_new_invoice': function() {
     Router.go('invoices.new');
+  },
+  'click #invoices_toggle_display_archived': function(event, template) {
+    var value = Template.instance().displayArchived.get();
+    Template.instance().displayArchived.set(!value);
   }
 });
 
 Template.Invoices.helpers({
   invoices: function() {
-    return Invoices.find({userId: Meteor.userId()}, {
+    var selector = {
+      userId: Meteor.userId()
+    };
+
+    if (!Template.instance().displayArchived.get()) {
+      selector.active = true;
+    }
+    
+    return Invoices.find(selector, {
       sort: {
         start: -1
       }
     });
+  },
+  displayArchived: function() {
+    return Template.instance().displayArchived.get();
   }
 });
 

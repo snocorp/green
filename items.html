@@ -56,7 +56,12 @@
 
 <template name="Items">
   <div class="floating-action"><span id="items_new_item" class="glyphicon glyphicon-plus-sign"></span></div>
-  <h2>Items</h2>
+  <h2>
+    Items
+    <div class="btn-group pull-right">
+      <button id="items_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}"><span class="glyphicon glyphicon-folder-close"></span></button>
+    </div>
+  </h2>
   {{#if items.count}}
     <div class="list-group">
       {{#each items}}
