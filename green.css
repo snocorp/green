@@ -58,6 +58,10 @@
   margin-bottom: 100px;
 }
 
+.invoice-header td {
+  vertical-align: top;
+}
+
 .invoice-terms {
   width: 100%;
   margin-bottom: 50px;
