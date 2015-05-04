@@ -14,3 +14,4 @@ momentjs:moment
 reactive-var
 zimme:iron-router-active
 markdown
+percolate:migrations

@@ -70,7 +70,7 @@
     </div>
     <div class="form-group {{hasError companyError}}">
       <label for="invoices_new_company">Company</label>
-      <textarea id="invoices_new_company" class="form-control" rows="4"></textarea>
+      <textarea id="invoices_new_company" class="form-control" rows="4">{{company}}</textarea>
       {{#if companyError}}
         <p class="help-block">{{companyError}}</p>
       {{else}}
@@ -85,8 +85,18 @@
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
           {{#each customers}}
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="invoices_new_customer_option">{{name}}</a></li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" class="invoices_new_customer_option">{{name}}</a>
+            </li>
           {{/each}}
+          {{#if customers.count}}
+            <li class="divider"></li>
+          {{/if}}
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="#" id="invoices_new_create_customer">
+              <span class="glyphicon glyphicon-plus"></span> Create a customer
+            </a>
+          </li>
         </ul>
       </span>
       <textarea id="invoices_new_customer" class="form-control" rows="4"></textarea>
@@ -102,6 +112,16 @@
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_new_terms">Payment Terms</label>
+      <span class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-search"></span><span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          {{#each terms}}
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="invoices_new_terms_option">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </span>
       <input id="invoices_new_terms" class="form-control"/>
     </div>
     <div class="form-group {{hasError percentageError}}">
@@ -117,11 +137,11 @@
 </template>
 
 <template name="Invoices">
-  <div class="floating-action"><span id="invoices_new_invoice" class="glyphicon glyphicon-plus-sign"></span></div>
+  <div class="floating-action"><span id="invoices_new_invoice" class="glyphicon glyphicon-plus-sign" title="Create a new invoice"></span></div>
   <h2>
     Invoices
     <div class="btn-group pull-right">
-      <button id="invoices_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}"><span class="glyphicon glyphicon-folder-close"></span></button>
+      <button id="invoices_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}" title="{{#if displayArchived}}Hide{{else}}Show{{/if}} archived"><span class="glyphicon glyphicon-folder-close"></span></button>
     </div>
   </h2>
   {{#if invoices.count}}
@@ -146,9 +166,9 @@
     <h2>
       {{invoice.start}} - {{invoice.end}}
       <div class="btn-group pull-right">
-        <button id="invoices_show_edit_invoice" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button id="invoices_show_edit_invoice" class="btn btn-default" title="Edit invoice details"><span class="glyphicon glyphicon-pencil"></span></button>
         {{#if invoice.active}}
-          <button id="invoices_show_remove_invoice" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>
+          <button id="invoices_show_remove_invoice" class="btn btn-default" title="Archive invoice"><span class="glyphicon glyphicon-trash"></span></button>
         {{/if}}
       </div>
     </h2>

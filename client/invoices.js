@@ -30,7 +30,7 @@ Template.Invoices.helpers({
     if (!Template.instance().displayArchived.get()) {
       selector.active = true;
     }
-    
+
     return Invoices.find(selector, {
       sort: {
         start: -1
@@ -114,8 +114,20 @@ Template.InvoicesNew.events({
   'click #invoices_new_cancel': function(event, template) {
     Router.go('invoices');
   },
+  'click #invoices_new_create_customer': function(event, template) {
+    Router.go('customers.new', {}, {query: "route=invoices.new"});
+
+    return false;
+  },
   'click .invoices_new_customer_option': function(event, template) {
     template.find('#invoices_new_customer').value = this.description;
+
+    return false;
+  },
+  'click .invoices_new_terms_option': function(event, template) {
+    template.find('#invoices_new_terms').value = this;
+
+    return false;
   }
 });
 
@@ -132,12 +144,28 @@ Template.InvoicesNew.helpers({
   end: function() {
     return Session.get('invoices_new_end');
   },
+  company: function() {
+    var user = Meteor.user();
+    if (user) {
+      return user.profile.company;
+    } else {
+      return false;
+    }
+  },
   customers: function() {
     return Customers.find({userId: Meteor.userId(), active: true}, {
       sort: {
         name: 1
       }
     });
+  },
+  terms: function() {
+    return [
+      'Weekly',
+      'Biweekly',
+      'Twice Monthly',
+      'Monthly'
+    ];
   }
 });
 

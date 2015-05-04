@@ -90,6 +90,8 @@ Template.CustomersNew.events({
 
     if (error) return;
 
+    var params = Iron.controller().params;
+
     Meteor.call(
       'createCustomer',
       {
@@ -99,7 +101,14 @@ Template.CustomersNew.events({
       function(error, result) {
         if (error) return;
 
-        Router.go('customers.show', {_id: result.id});
+        if (params.query.route) {
+          var route = params.query.route;
+          delete params.query.route;
+
+          Router.go(route, params.query);
+        } else {
+          Router.go('customers.show', {_id: result.id});
+        }
       }
     );
   },
