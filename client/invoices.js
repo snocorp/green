@@ -117,17 +117,20 @@ Template.InvoicesNew.events({
   'click #invoices_new_create_customer': function(event, template) {
     Router.go('customers.new', {}, {query: "route=invoices.new"});
 
-    return false;
+    event.preventDefault();
+    return true;
   },
   'click .invoices_new_customer_option': function(event, template) {
     template.find('#invoices_new_customer').value = this.description;
 
-    return false;
+    event.preventDefault();
+    return true;
   },
   'click .invoices_new_terms_option': function(event, template) {
     template.find('#invoices_new_terms').value = this;
 
-    return false;
+    event.preventDefault();
+    return true;
   }
 });
 
@@ -158,6 +161,14 @@ Template.InvoicesNew.helpers({
         name: 1
       }
     });
+  },
+  services: function() {
+    var user = Meteor.user();
+    if (user) {
+      return user.profile.services;
+    } else {
+      return false;
+    }
   },
   terms: function() {
     return [

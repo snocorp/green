@@ -16,15 +16,25 @@ Template.Profile.helpers({
     } else {
       return false;
     }
+  },
+  'services': function() {
+    var user = Meteor.user();
+    if (user) {
+      return user.profile.services;
+    } else {
+      return false;
+    }
   }
 });
 
 Template.ProfileEdit.events({
   'click #profile_edit_update_profile': function(event, template) {
     var company = template.find('#profile_edit_company').value;
+    var services = template.find('#profile_edit_services').value;
 
     Meteor.call('updateProfile', {
-        company: company
+        company: company,
+        services: services
       },
       function(error, result) {
         Router.go('profile');
@@ -41,6 +51,14 @@ Template.ProfileEdit.helpers({
     var user = Meteor.user();
     if (user) {
       return user.profile.company;
+    } else {
+      return false;
+    }
+  },
+  'services': function() {
+    var user = Meteor.user();
+    if (user) {
+      return user.profile.services;
     } else {
       return false;
     }

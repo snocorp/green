@@ -113,7 +113,15 @@ Template.CustomersNew.events({
     );
   },
   'click #customers_new_cancel': function(event, template) {
-    Router.go('customers');
+    var params = Iron.controller().params;
+    if (params.query.route) {
+      var route = params.query.route;
+      delete params.query.route;
+
+      Router.go(route, params.query);
+    } else {
+      Router.go('customers');
+    }
   }
 });
 

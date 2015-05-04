@@ -74,7 +74,7 @@
       {{#if companyError}}
         <p class="help-block">{{companyError}}</p>
       {{else}}
-        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+        <p class="help-block">The default can be set in your profile. Add two spaces at the end of a line to cause it to wrap when formatted.</p>
       {{/if}}
     </div>
     <div class="form-group {{hasError customerError}}">
@@ -108,7 +108,8 @@
     </div>
     <div class="form-group {{hasError servicesError}}">
       <label for="invoices_new_services">Services</label>
-      <input id="invoices_new_services" class="form-control"/>
+      <input id="invoices_new_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
+      <p class="help-block">The default can be set in your profile.</p>
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_new_terms">Payment Terms</label>

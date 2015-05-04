@@ -17,6 +17,18 @@
       {{/if}}
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <strong>Services</strong>
+    </div>
+    <div class="col-sm-9">
+      {{#if services}}
+        {{services}}
+      {{else}}
+        <span class="text-muted">not set</span>
+      {{/if}}
+    </div>
+  </div>
 </template>
 
 <template name="ProfileEdit">
@@ -33,6 +45,11 @@
           Add two spaces at the end of a line to cause it to wrap when formatted.
         </p>
       {{/if}}
+    </div>
+    <div class="form-group {{hasError servicesError}}">
+      <label for="profile_edit_services">Services</label>
+      <input id="profile_edit_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
+      <p class="help-block">This will be used as the default when creating a new invoice.</p>
     </div>
   </form>
   <button id="profile_edit_update_profile" type="button" class="btn btn-primary">update</button>
