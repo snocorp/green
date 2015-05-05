@@ -12,6 +12,7 @@ Template.CustomersEdit.events({
     var error = false;
     var name = template.find('#customers_edit_name').value;
     var description = template.find('#customers_edit_description').value;
+    var percentage = template.find('#customers_edit_percentage').value;
 
     if (name === null || name.length === 0) {
       template.nameError.set('Name is required');
@@ -35,7 +36,8 @@ Template.CustomersEdit.events({
       id,
       {
         name: name,
-        description: description
+        description: description,
+        percentage: percentage
       },
       function(error, result) {
         if (error) return;
@@ -73,6 +75,7 @@ Template.CustomersNew.events({
     var error = false;
     var name = template.find('#customers_new_name').value;
     var description = template.find('#customers_new_description').value;
+    var percentage = template.find('#customers_new_percentage').value;
 
     if (name === null || name.length === 0) {
       template.nameError.set('Name is required');
@@ -96,7 +99,8 @@ Template.CustomersNew.events({
       'createCustomer',
       {
         name: name,
-        description: description
+        description: description,
+        percentage: percentage
       },
       function(error, result) {
         if (error) return;

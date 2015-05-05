@@ -13,8 +13,18 @@
       {{#if descriptionError}}
         <p class="help-block">{{descriptionError}}</p>
       {{else}}
-        <p class="help-block">Description will be copied to the invoice when a customer is chosen.</p>
+        <p class="help-block">
+          Description will be copied to the invoice when a customer is chosen.
+          Add two spaces at the end of a line to cause it to wrap when formatted.
+        </p>
       {{/if}}
+    </div>
+    <div class="form-group {{hasError percentageError}}">
+      <label for="customers_edit_percentage">Percentage</label>
+      <div class="input-group">
+        <input id="customers_edit_percentage" class="form-control" type="number" value="{{customer.percentage}}"/>
+        <span class="input-group-addon">%</span>
+      </div>
     </div>
   </form>
   <button id="customers_edit_update_customer" type="button" class="btn btn-primary">update</button>
@@ -24,7 +34,7 @@
 <template name="CustomersNew">
   <form>
     <div class="form-group {{hasError nameError}}">
-      <label for="customers_new_name">Code</label>
+      <label for="customers_new_name">Name</label>
       <input id="customers_new_name" class="form-control" type="text" value="{{name}}" name="name" placeholder="eg. Zen Massage"/>
       {{#if nameError}}
         <p class="help-block">{{nameError}}</p>
@@ -37,6 +47,18 @@
         <p class="help-block">{{descriptionError}}</p>
       {{else}}
         <p class="help-block">Description will be copied to the invoice when a customer is chosen.</p>
+      {{/if}}
+    </div>
+    <div class="form-group {{hasError percentageError}}">
+      <label for="customers_new_percentage">Percentage</label>
+      <div class="input-group">
+        <input id="customers_new_percentage" class="form-control" type="number"/>
+        <span class="input-group-addon">%</span>
+      </div>
+      {{#if percentageError}}
+        <p class="help-block">{{percentageError}}</p>
+      {{else}}
+        <p class="help-block">Percentage will be copied to the invoice when a customer is chosen.</p>
       {{/if}}
     </div>
   </form>
@@ -88,5 +110,18 @@
       {{/if}}
     </div>
   </h2>
-  {{#markdown}}{{customer.description}}{{/markdown}}
+  <div class="row">
+    <div class="col-md-2"><strong>Description</strong></div>
+    <div class="col-md-4">
+      {{#markdown}}{{customer.description}}{{/markdown}}
+    </div>
+    <div class="col-md-2"><strong>Percentage</strong></div>
+    <div class="col-md-4">
+      {{#if customer.percentage}}
+        {{customer.percentage}}%
+      {{else}}
+        <span class="text-muted">not set</span>
+      {{/if}}
+    </div>
+  </div>
 </template>

@@ -122,6 +122,7 @@ Template.InvoicesNew.events({
   },
   'click .invoices_new_customer_option': function(event, template) {
     template.find('#invoices_new_customer').value = this.description;
+    template.find('#invoices_new_percentage').value = this.percentage;
 
     event.preventDefault();
     return true;
