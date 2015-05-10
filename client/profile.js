@@ -1,5 +1,5 @@
 /* jshint node: true, jquery: true */
-/* global Meteor, Template, Router */
+/* global Meteor, Template, ReactiveVar, Router */
 'use strict';
 
 Template.Profile.events({
@@ -27,6 +27,11 @@ Template.Profile.helpers({
   }
 });
 
+Template.ProfileEdit.onCreated(function() {
+  this.companyError = new ReactiveVar('');
+  this.servicesError = new ReactiveVar('');
+});
+
 Template.ProfileEdit.events({
   'click #profile_edit_update_profile': function(event, template) {
     var company = template.find('#profile_edit_company').value;
@@ -37,7 +42,20 @@ Template.ProfileEdit.events({
         services: services
       },
       function(error, result) {
-        Router.go('profile');
+        if (error) {
+          if (error.details.company) {
+            template.companyError.set(error.details.company);
+          }
+
+          if (error.details.services) {
+            template.servicesError.set(error.details.services);
+          }
+        } else {
+          template.companyError.set('');
+          template.servicesError.set('');
+
+          Router.go('profile');
+        }
       }
     );
   },
@@ -47,7 +65,13 @@ Template.ProfileEdit.events({
 });
 
 Template.ProfileEdit.helpers({
-  'company': function() {
+  companyError: function() {
+    return Template.instance().companyError.get();
+  },
+  servicesError: function() {
+    return Template.instance().servicesError.get();
+  },
+  company: function() {
     var user = Meteor.user();
     if (user) {
       return user.profile.company;
@@ -55,7 +79,7 @@ Template.ProfileEdit.helpers({
       return false;
     }
   },
-  'services': function() {
+  services: function() {
     var user = Meteor.user();
     if (user) {
       return user.profile.services;

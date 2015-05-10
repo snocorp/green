@@ -49,7 +49,11 @@
     <div class="form-group {{hasError servicesError}}">
       <label for="profile_edit_services">Services</label>
       <input id="profile_edit_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
-      <p class="help-block">This will be used as the default when creating a new invoice.</p>
+      {{#if servicesError}}
+        <p class="help-block">{{servicesError}}</p>
+      {{else}}
+        <p class="help-block">This will be used as the default when creating a new invoice.</p>
+      {{/if}}
     </div>
   </form>
   <button id="profile_edit_update_profile" type="button" class="btn btn-primary">update</button>
