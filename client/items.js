@@ -25,7 +25,7 @@ Template.Items.helpers({
     if (!Template.instance().displayArchived.get()) {
       selector.active = true;
     }
-    
+
     return Items.find(selector, {
       sort: {
         code: 1
@@ -43,6 +43,36 @@ Template.item.helpers({
   }
 });
 
+var handleError = function(error, template) {
+  if (error) {
+    if (error.details.code) {
+      template.codeError.set(error.details.code);
+    } else {
+      template.codeError.set('');
+    }
+
+    if (error.details.description) {
+      template.descriptionError.set(error.details.description);
+    } else {
+      template.descriptionError.set('');
+    }
+
+    if (error.details.price) {
+      template.priceError.set(error.details.price);
+    } else {
+      template.priceError.set('');
+    }
+
+    return true;
+  } else {
+    template.codeError.set('');
+    template.descriptionError.set('');
+    template.priceError.set('');
+
+    return false;
+  }
+};
+
 Template.ItemsNew.onCreated(function() {
   this.codeError = new ReactiveVar('');
   this.descriptionError = new ReactiveVar('');
@@ -51,36 +81,12 @@ Template.ItemsNew.onCreated(function() {
 
 Template.ItemsNew.events({
   'click #items_new_create_item': function(event, template) {
-    var error = false;
     var code = template.find('#items_new_code').value;
     var description = template.find('#items_new_description').value;
     var price = template.find('#items_new_price').value;
-
-    if (code === null || code.length === 0) {
-      template.codeError.set('is required');
-      error = true;
-    } else {
-      template.codeError.set('');
+    if ($.isNumeric(price)) {
+      price *= 100;
     }
-
-    if (description === null || description.length === 0) {
-      template.descriptionError.set('is required');
-      error = true;
-    } else {
-      template.descriptionError.set('');
-    }
-
-    if (price === null || price.length === 0) {
-      template.priceError.set('is required and must be numeric');
-      error = true;
-    } else if (!$.isNumeric(price)) {
-      template.priceError.set('must be numeric');
-      error = true;
-    } else {
-      template.priceError.set('');
-    }
-
-    if (error) return;
 
     var params = Iron.controller().params;
 
@@ -89,18 +95,18 @@ Template.ItemsNew.events({
       {
         code: code,
         description: description,
-        price: price * 100
+        price: price
       },
       function(error, result) {
-        if (error) return;
+        if (!handleError(error, template)) {
+          if (params.query.route) {
+            var route = params.query.route;
+            delete params.query.route;
 
-        if (params.query.route) {
-          var route = params.query.route;
-          delete params.query.route;
-
-          Router.go(route, params.query);
-        } else {
-          Router.go('items.show', {_id: result.id});
+            Router.go(route, params.query);
+          } else {
+            Router.go('items.show', {_id: result.id});
+          }
         }
       }
     );
@@ -142,32 +148,9 @@ Template.ItemsEdit.events({
     var code = template.find('#items_edit_code').value;
     var description = template.find('#items_edit_description').value;
     var price = template.find('#items_edit_price').value;
-
-    if (code === null || code.length === 0) {
-      template.codeError.set('is required');
-      error = true;
-    } else {
-      template.codeError.set('');
+    if ($.isNumeric(price)) {
+      price *= 100;
     }
-
-    if (description === null || description.length === 0) {
-      template.descriptionError.set('is required');
-      error = true;
-    } else {
-      template.descriptionError.set('');
-    }
-
-    if (price === null || price.length === 0) {
-      template.priceError.set('is required and must be numeric');
-      error = true;
-    } else if (!$.isNumeric(price)) {
-      template.priceError.set('must be numeric');
-      error = true;
-    } else {
-      template.priceError.set('');
-    }
-
-    if (error) return;
 
     var id = Iron.controller().params._id;
     var params = Iron.controller().params;
@@ -177,16 +160,18 @@ Template.ItemsEdit.events({
       {
         code: code,
         description: description,
-        price: price * 100
+        price: price
       },
       function(error, result) {
-        if (params.query.route) {
-          var route = params.query.route;
-          delete params.query.route;
+        if (!handleError(error, template)) {
+          if (params.query.route) {
+            var route = params.query.route;
+            delete params.query.route;
 
-          Router.go(route, params.query);
-        } else {
-          Router.go('items.show', {_id: id});
+            Router.go(route, params.query);
+          } else {
+            Router.go('items.show', {_id: id});
+          }
         }
       }
     );

@@ -45,10 +45,14 @@ Template.ProfileEdit.events({
         if (error) {
           if (error.details.company) {
             template.companyError.set(error.details.company);
+          } else {
+            template.companyError.set('');
           }
 
           if (error.details.services) {
             template.servicesError.set(error.details.services);
+          } else {
+            template.servicesError.set('');
           }
         } else {
           template.companyError.set('');
