@@ -43,7 +43,7 @@ Template.item.helpers({
   }
 });
 
-var handleError = function(error, template) {
+var handleItemError = function(error, template) {
   if (error) {
     if (error.details.code) {
       template.codeError.set(error.details.code);
@@ -98,7 +98,7 @@ Template.ItemsNew.events({
         price: price
       },
       function(error, result) {
-        if (!handleError(error, template)) {
+        if (!handleItemError(error, template)) {
           if (params.query.route) {
             var route = params.query.route;
             delete params.query.route;
@@ -163,15 +163,15 @@ Template.ItemsEdit.events({
         price: price
       },
       function(error, result) {
-        if (!handleError(error, template)) {
-          if (params.query.route) {
-            var route = params.query.route;
-            delete params.query.route;
+        if (handleItemError(error, template)) return;
 
-            Router.go(route, params.query);
-          } else {
-            Router.go('items.show', {_id: id});
-          }
+        if (params.query.route) {
+          var route = params.query.route;
+          delete params.query.route;
+
+          Router.go(route, params.query);
+        } else {
+          Router.go('items.show', {_id: id});
         }
       }
     );
@@ -228,10 +228,39 @@ Template.ItemsShow.helpers({
   }
 });
 
+var handleItemPriceError = function(error, template) {
+  if (error) {
+    if (error.details.untilDate) {
+      template.untilDateError.set(error.details.untilDate);
+    } else {
+      template.untilDateError.set('');
+    }
+
+    if (error.details.price) {
+      template.priceError.set(error.details.price);
+    } else {
+      template.priceError.set('');
+    }
+
+    return true;
+  } else {
+    template.untilDateError.set('');
+    template.priceError.set('');
+
+    return false;
+  }
+};
+
 Template.itemPrices.events({
-  'click #item_prices_new_item_price': function() {
+  'click #item_prices_new_item_price': function(event, template) {
     var itemId = Iron.controller().params._id;
-    Meteor.call('createItemPrice', itemId);
+    Meteor.call(
+      'createItemPrice',
+      itemId,
+      function(error, result) {
+        handleItemPriceError(error, template);
+      }
+    );
   }
 });
 
@@ -287,42 +316,22 @@ Template.itemPrice.events({
     Meteor.call('removeItemPrice', id);
   },
   'click .item_price_edit_done': function(event, template) {
-    var error = false;
     var id = Template.currentData()._id;
     var untilDate = template.find('#item_price_until_date_' + id).value;
     var price = template.find('#item_price_price_' + id).value;
-
-    if (untilDate === null || untilDate.length === 0) {
-      template.untilDateError.set('Until date is required');
-      error = true;
-    } else if (!moment(untilDate, 'YYYY-MM-DD').isValid()) {
-      template.untilDateError.set('Until date is not valid');
-      error = true;
-    } else {
-      template.untilDateError.set('');
+    if ($.isNumeric(price)) {
+      price *= 100;
     }
-
-    if (price === null || price.length === 0) {
-      template.priceError.set('Price is required and must be numeric');
-      error = true;
-    } else if (!$.isNumeric(price)) {
-      template.priceError.set('Price must be numeric');
-      error = true;
-    } else {
-      template.priceError.set('');
-    }
-
-    if (error) return;
 
     Meteor.call(
       'updateItemPrice',
       id,
       {
         untilDate: untilDate,
-        price: price * 100
+        price: price
       },
       function(error, result) {
-        if (error) return;
+        if (handleItemPriceError(error, template)) return;
 
         template.editing.set(false);
       }

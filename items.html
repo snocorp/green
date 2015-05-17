@@ -155,13 +155,13 @@
       </div>
       <div class="row">
         <div class="col-md-1 {{hasError untilDateError}}">
-          <label for="item_price_until_date_{{_id}}">Until</label>
+          <label for="item_price_until_date_{{_id}}" class="control-label">Until</label>
         </div>
         <div class="col-md-3 {{hasError untilDateError}}">
           <input id="item_price_until_date_{{_id}}" type="text" class="form-control" value="{{untilDate}}"/>
         </div>
         <div class="col-md-1 col-md-offset-1 {{hasError priceError}}">
-          <label for="item_price_price_{{_id}}">Price</label>
+          <label for="item_price_price_{{_id}}" class="control-label">Price</label>
         </div>
         <div class="col-md-2 {{hasError priceError}}">
           <input id="item_price_price_{{_id}}" type="number" class="form-control text-right" value="{{price}}"/>
