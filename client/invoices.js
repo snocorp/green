@@ -50,6 +50,14 @@ Template.InvoicesNew.onCreated(function() {
   this.servicesError = new ReactiveVar('');
   this.termsError = new ReactiveVar('');
   this.percentageError = new ReactiveVar('');
+
+  var user = Meteor.user();
+  var companyDefault = false;
+  if (user) {
+    companyDefault = user.profile.company;
+  }
+  this.company = new ReactiveVar(companyDefault);
+  this.customer = new ReactiveVar('');
 });
 
 Template.InvoicesNew.onRendered(function() {
@@ -130,6 +138,8 @@ Template.InvoicesNew.events({
     template.find('#invoices_new_customer').value = this.description;
     template.find('#invoices_new_percentage').value = this.percentage;
 
+    Template.instance().customer.set(this.description);
+
     event.preventDefault();
     return true;
   },
@@ -137,6 +147,20 @@ Template.InvoicesNew.events({
     template.find('#invoices_new_terms').value = this;
 
     event.preventDefault();
+    return true;
+  },
+  'keyup, change #invoices_new_company': function(event, template) {
+    var company = template.find('#invoices_new_company').value;
+
+    Template.instance().company.set(company);
+
+    return true;
+  },
+  'keyup, change #invoices_new_customer': function(event, template) {
+    var customer = template.find('#invoices_new_customer').value;
+
+    Template.instance().customer.set(customer);
+
     return true;
   }
 });
@@ -170,12 +194,10 @@ Template.InvoicesNew.helpers({
     return Session.get('invoices_new_end');
   },
   company: function() {
-    var user = Meteor.user();
-    if (user) {
-      return user.profile.company;
-    } else {
-      return false;
-    }
+    return Template.instance().company.get();
+  },
+  customer: function() {
+    return Template.instance().customer.get();
   },
   customers: function() {
     return Customers.find({userId: Meteor.userId(), active: true}, {
@@ -210,12 +232,24 @@ Template.InvoicesEdit.onCreated(function() {
   this.servicesError = new ReactiveVar('');
   this.termsError = new ReactiveVar('');
   this.percentageError = new ReactiveVar('');
+
+  this.company = new ReactiveVar('');
+  this.customer = new ReactiveVar('');
 });
 
 Template.InvoicesEdit.onRendered(function() {
   $('#invoices_edit_daterange').datepicker({
     format: "yyyy-mm-dd",
     orientation: "top auto"
+  });
+
+  var self = this;
+  var id = Iron.controller().params._id;
+
+  this.subscribe('invoices', function() {
+    var invoice = Invoices.findOne(id);
+    self.company.set(invoice.company);
+    self.customer.set(invoice.customer);
   });
 });
 
@@ -252,6 +286,20 @@ Template.InvoicesEdit.events({
   'click #invoices_edit_cancel': function(event, template) {
     var id = Iron.controller().params._id;
     Router.go('invoices.show', {_id: id});
+  },
+  'keyup, change #invoices_edit_company': function(event, template) {
+    var company = template.find('#invoices_edit_company').value;
+
+    Template.instance().company.set(company);
+
+    return true;
+  },
+  'keyup, change #invoices_edit_customer': function(event, template) {
+    var customer = template.find('#invoices_edit_customer').value;
+
+    Template.instance().customer.set(customer);
+
+    return true;
   }
 });
 
@@ -280,6 +328,12 @@ Template.InvoicesEdit.helpers({
   invoice: function() {
     var id = Iron.controller().params._id;
     return Invoices.findOne(id);
+  },
+  company: function() {
+    return Template.instance().company.get();
+  },
+  customer: function() {
+    return Template.instance().customer.get();
   }
 });
 

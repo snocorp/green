@@ -86,3 +86,7 @@ tr.list-group-item > td {
 .invoice-items .price {
   text-align: right;
 }
+
+textarea {
+  resize: vertical;
+}

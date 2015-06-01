@@ -2,59 +2,85 @@
   <form>
     <div class="form-group {{hasError startError}} {{hasError endError}}">
       <label for="invoices_edit_daterange">Date Range</label>
-      <div class="input-daterange input-group" id="invoices_edit_daterange">
-        <input id="invoices_edit_start" type="text" class="form-control" name="start" value="{{invoice.start}}"/>
-        <span class="input-group-addon">to</span>
-        <input id="invoices_edit_end" type="text" class="form-control" name="end" value="{{invoice.end}}" />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-daterange input-group" id="invoices_edit_daterange">
+            <input id="invoices_edit_start" type="text" class="form-control" name="start" value="{{invoice.start}}"/>
+            <span class="input-group-addon">to</span>
+            <input id="invoices_edit_end" type="text" class="form-control" name="end" value="{{invoice.end}}" />
+          </div>
+          {{#if startError}}
+            <p class="help-block">{{startError}}</p>
+          {{/if}}
+          {{#if endError}}
+            <p class="help-block">{{endError}}</p>
+          {{/if}}
+        </div>
       </div>
-      {{#if startError}}
-        <p class="help-block">{{startError}}</p>
-      {{/if}}
-      {{#if endError}}
-        <p class="help-block">{{endError}}</p>
-      {{/if}}
     </div>
     <div class="form-group {{hasError companyError}}">
       <label for="invoices_edit_company">Company</label>
-      <textarea id="invoices_edit_company" class="form-control" rows="4">{{invoice.company}}</textarea>
-      {{#if companyError}}
-        <p class="help-block">{{companyError}}</p>
-      {{else}}
-        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_edit_company" class="form-control" rows="4">{{invoice.company}}</textarea>
+          {{#if companyError}}
+            <p class="help-block">{{companyError}}</p>
+          {{else}}
+            <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{company}}{{/markdown}}</div>
+      </div>
     </div>
     <div class="form-group {{hasError customerError}}">
       <label for="invoices_edit_customer">Customer</label>
-      <textarea id="invoices_edit_customer" class="form-control" rows="4">{{invoice.customer}}</textarea>
-      {{#if customerError}}
-        <p class="help-block">{{customerError}}</p>
-      {{else}}
-        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_edit_customer" class="form-control" rows="4">{{invoice.customer}}</textarea>
+          {{#if customerError}}
+            <p class="help-block">{{customerError}}</p>
+          {{else}}
+            <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{customer}}{{/markdown}}</div>
+      </div>
     </div>
     <div class="form-group {{hasError servicesError}}">
       <label for="invoices_edit_services">Services</label>
-      <input id="invoices_edit_services" class="form-control" value="{{invoice.services}}"/>
-      {{#if servicesError}}
-        <p class="help-block">{{servicesError}}</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_edit_services" class="form-control" value="{{invoice.services}}"/>
+          {{#if servicesError}}
+            <p class="help-block">{{servicesError}}</p>
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_edit_terms">Payment Terms</label>
-      <input id="invoices_edit_terms" class="form-control" value="{{invoice.terms}}"/>
-      {{#if termsError}}
-        <p class="help-block">{{termsError}}</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_edit_terms" class="form-control" value="{{invoice.terms}}"/>
+          {{#if termsError}}
+            <p class="help-block">{{termsError}}</p>
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="form-group {{hasError percentageError}}">
       <label for="invoices_edit_percentage">Percentage</label>
-      <div class="input-group">
-        <input id="invoices_edit_percentage" class="form-control" type="number" value="{{invoice.percentage}}"/>
-        <span class="input-group-addon">%</span>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input id="invoices_edit_percentage" class="form-control" type="number" value="{{invoice.percentage}}"/>
+            <span class="input-group-addon">%</span>
+          </div>
+          {{#if percentageError}}
+            <p class="help-block">{{percentageError}}</p>
+          {{/if}}
+        </div>
       </div>
-      {{#if percentageError}}
-        <p class="help-block">{{percentageError}}</p>
-      {{/if}}
     </div>
     <button id="invoices_edit_update_invoice" class="btn btn-primary" type="button">update</button>
     <button id="invoices_edit_cancel" class="btn btn-default" type="button">cancel</button>
@@ -65,26 +91,35 @@
   <form>
     <div class="form-group {{hasError startError}} {{hasError endError}}">
       <label for="invoices_new_daterange">Date Range</label>
-      <div class="input-daterange input-group" id="invoices_new_daterange">
-        <input id="invoices_new_start" type="text" class="form-control" name="start" value="{{start}}"/>
-        <span class="input-group-addon">to</span>
-        <input id="invoices_new_end" type="text" class="form-control" name="end" value="{{end}}" />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-daterange input-group" id="invoices_new_daterange">
+            <input id="invoices_new_start" type="text" class="form-control" name="start" value="{{start}}"/>
+            <span class="input-group-addon">to</span>
+            <input id="invoices_new_end" type="text" class="form-control" name="end" value="{{end}}" />
+          </div>
+          {{#if startError}}
+            <p class="help-block">{{startError}}</p>
+          {{/if}}
+          {{#if endError}}
+            <p class="help-block">{{endError}}</p>
+          {{/if}}
+        </div>
       </div>
-      {{#if startError}}
-        <p class="help-block">{{startError}}</p>
-      {{/if}}
-      {{#if endError}}
-        <p class="help-block">{{endError}}</p>
-      {{/if}}
     </div>
     <div class="form-group {{hasError companyError}}">
       <label for="invoices_new_company">Company</label>
-      <textarea id="invoices_new_company" class="form-control" rows="4">{{company}}</textarea>
-      {{#if companyError}}
-        <p class="help-block">{{companyError}}</p>
-      {{else}}
-        <p class="help-block">The default can be set in your profile. Add two spaces at the end of a line to cause it to wrap when formatted.</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_new_company" class="form-control" rows="4">{{company}}</textarea>
+          {{#if companyError}}
+            <p class="help-block">{{companyError}}</p>
+          {{else}}
+            <p class="help-block">The default can be set in your profile. Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{company}}{{/markdown}}</div>
+      </div>
     </div>
     <div class="form-group {{hasError customerError}}">
       <label for="invoices_new_customer">Customer</label>
@@ -108,21 +143,30 @@
           </li>
         </ul>
       </span>
-      <textarea id="invoices_new_customer" class="form-control" rows="4"></textarea>
-      {{#if customerError}}
-        <p class="help-block">{{customerError}}</p>
-      {{else}}
-        <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_new_customer" class="form-control" rows="4">{{customer}}</textarea>
+          {{#if customerError}}
+            <p class="help-block">{{customerError}}</p>
+          {{else}}
+            <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{customer}}{{/markdown}}</div>
+      </div>
     </div>
     <div class="form-group {{hasError servicesError}}">
       <label for="invoices_new_services">Services</label>
-      <input id="invoices_new_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
-      {{#if servicesError}}
-        <p class="help-block">{{servicesError}}</p>
-      {{else}}
-        <p class="help-block">The default can be set in your profile.</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_new_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
+          {{#if servicesError}}
+            <p class="help-block">{{servicesError}}</p>
+          {{else}}
+            <p class="help-block">The default can be set in your profile.</p>
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_new_terms">Payment Terms</label>
@@ -136,20 +180,28 @@
           {{/each}}
         </ul>
       </span>
-      <input id="invoices_new_terms" class="form-control"/>
-      {{#if termsError}}
-        <p class="help-block">{{termsError}}</p>
-      {{/if}}
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_new_terms" class="form-control"/>
+          {{#if termsError}}
+            <p class="help-block">{{termsError}}</p>
+          {{/if}}
+        </div>
+      </div>
     </div>
     <div class="form-group {{hasError percentageError}}">
       <label for="invoices_new_percentage">Percentage</label>
-      <div class="input-group">
-        <input id="invoices_new_percentage" class="form-control" type="number"/>
-        <span class="input-group-addon">%</span>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input id="invoices_new_percentage" class="form-control" type="number"/>
+            <span class="input-group-addon">%</span>
+          </div>
+          {{#if percentageError}}
+            <p class="help-block">{{percentageError}}</p>
+          {{/if}}
+        </div>
       </div>
-      {{#if percentageError}}
-        <p class="help-block">{{percentageError}}</p>
-      {{/if}}
     </div>
     <button id="invoices_new_create_invoice" class="btn btn-primary" type="button">create</button>
     <button id="invoices_new_cancel" class="btn btn-default" type="button">cancel</button>
