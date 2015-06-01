@@ -35,10 +35,16 @@
     <div class="form-group {{hasError servicesError}}">
       <label for="invoices_edit_services">Services</label>
       <input id="invoices_edit_services" class="form-control" value="{{invoice.services}}"/>
+      {{#if servicesError}}
+        <p class="help-block">{{servicesError}}</p>
+      {{/if}}
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_edit_terms">Payment Terms</label>
       <input id="invoices_edit_terms" class="form-control" value="{{invoice.terms}}"/>
+      {{#if termsError}}
+        <p class="help-block">{{termsError}}</p>
+      {{/if}}
     </div>
     <div class="form-group {{hasError percentageError}}">
       <label for="invoices_edit_percentage">Percentage</label>
@@ -46,6 +52,9 @@
         <input id="invoices_edit_percentage" class="form-control" type="number" value="{{invoice.percentage}}"/>
         <span class="input-group-addon">%</span>
       </div>
+      {{#if percentageError}}
+        <p class="help-block">{{percentageError}}</p>
+      {{/if}}
     </div>
     <button id="invoices_edit_update_invoice" class="btn btn-primary" type="button">update</button>
     <button id="invoices_edit_cancel" class="btn btn-default" type="button">cancel</button>
@@ -109,7 +118,11 @@
     <div class="form-group {{hasError servicesError}}">
       <label for="invoices_new_services">Services</label>
       <input id="invoices_new_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
-      <p class="help-block">The default can be set in your profile.</p>
+      {{#if servicesError}}
+        <p class="help-block">{{servicesError}}</p>
+      {{else}}
+        <p class="help-block">The default can be set in your profile.</p>
+      {{/if}}
     </div>
     <div class="form-group {{hasError termsError}}">
       <label for="invoices_new_terms">Payment Terms</label>
@@ -124,6 +137,9 @@
         </ul>
       </span>
       <input id="invoices_new_terms" class="form-control"/>
+      {{#if termsError}}
+        <p class="help-block">{{termsError}}</p>
+      {{/if}}
     </div>
     <div class="form-group {{hasError percentageError}}">
       <label for="invoices_new_percentage">Percentage</label>
@@ -131,6 +147,9 @@
         <input id="invoices_new_percentage" class="form-control" type="number"/>
         <span class="input-group-addon">%</span>
       </div>
+      {{#if percentageError}}
+        <p class="help-block">{{percentageError}}</p>
+      {{/if}}
     </div>
     <button id="invoices_new_create_invoice" class="btn btn-primary" type="button">create</button>
     <button id="invoices_new_cancel" class="btn btn-default" type="button">cancel</button>

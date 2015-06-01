@@ -45,6 +45,11 @@ Template.Invoices.helpers({
 Template.InvoicesNew.onCreated(function() {
   this.startError = new ReactiveVar('');
   this.endError = new ReactiveVar('');
+  this.companyError = new ReactiveVar('');
+  this.customerError = new ReactiveVar('');
+  this.servicesError = new ReactiveVar('');
+  this.termsError = new ReactiveVar('');
+  this.percentageError = new ReactiveVar('');
 });
 
 Template.InvoicesNew.onRendered(function() {
@@ -54,6 +59,30 @@ Template.InvoicesNew.onRendered(function() {
   });
 });
 
+var handleInvoiceError = function(error, template) {
+  var attributes = [
+    'start', 'end', 'company', 'customer', 'services', 'terms', 'percentage'
+  ];
+
+  if (error) {
+    attributes.forEach(function(attr) {
+      if (error.details[attr]) {
+        template[attr+'Error'].set(error.details[attr]);
+      } else {
+        template[attr+'Error'].set('');
+      }
+    });
+
+    return true;
+  } else {
+    attributes.forEach(function(attr) {
+      template[attr+'Error'].set('');
+    });
+
+    return false;
+  }
+};
+
 Template.InvoicesNew.events({
   'change #invoices_new_start': function(event, template) {
     Session.set('invoices_new_start', $('#invoices_new_start').val());
@@ -62,7 +91,6 @@ Template.InvoicesNew.events({
     Session.set('invoices_new_end', $('#invoices_new_end').val());
   },
   'click #invoices_new_create_invoice': function(event, template) {
-    var error = false;
     var start = template.find('#invoices_new_start').value;
     var end = template.find('#invoices_new_end').value;
     var company = template.find('#invoices_new_company').value;
@@ -70,28 +98,6 @@ Template.InvoicesNew.events({
     var services = template.find('#invoices_new_services').value;
     var terms = template.find('#invoices_new_terms').value;
     var percentage = template.find('#invoices_new_percentage').value;
-
-    if (start === null || start.length === 0) {
-      template.startError.set('Start date is required');
-      error = true;
-    } else if (!moment(start, 'YYYY-MM-DD').isValid()) {
-      template.startError.set('Start date is not valid');
-      error = true;
-    } else {
-      template.startError.set('');
-    }
-
-    if (end === null || end.length === 0) {
-      template.endError.set('End date is required');
-      error = true;
-    } else if (!moment(end, 'YYYY-MM-DD').isValid()) {
-      template.endError.set('End date is not valid');
-      error = true;
-    } else {
-      template.endError.set('');
-    }
-
-    if (error) return;
 
     Meteor.call(
       'createInvoice',
@@ -105,9 +111,9 @@ Template.InvoicesNew.events({
         percentage: percentage
       },
       function(error, result) {
-        if (error) return;
-
-        Router.go('invoices.show', {_id: result.id});
+        if (!handleInvoiceError(error, template)) {
+          Router.go('invoices.show', {_id: result.id});
+        }
       }
     );
   },
@@ -141,6 +147,21 @@ Template.InvoicesNew.helpers({
   },
   endError: function() {
     return Template.instance().endError.get();
+  },
+  companyError: function() {
+    return Template.instance().companyError.get();
+  },
+  customerError: function() {
+    return Template.instance().customerError.get();
+  },
+  servicesError: function() {
+    return Template.instance().servicesError.get();
+  },
+  termsError: function() {
+    return Template.instance().termsError.get();
+  },
+  percentageError: function() {
+    return Template.instance().percentageError.get();
   },
   start: function () {
     return Session.get('invoices_new_start');
@@ -182,9 +203,13 @@ Template.InvoicesNew.helpers({
 });
 
 Template.InvoicesEdit.onCreated(function() {
-  this.customerError = new ReactiveVar('');
   this.startError = new ReactiveVar('');
   this.endError = new ReactiveVar('');
+  this.companyError = new ReactiveVar('');
+  this.customerError = new ReactiveVar('');
+  this.servicesError = new ReactiveVar('');
+  this.termsError = new ReactiveVar('');
+  this.percentageError = new ReactiveVar('');
 });
 
 Template.InvoicesEdit.onRendered(function() {
@@ -196,7 +221,6 @@ Template.InvoicesEdit.onRendered(function() {
 
 Template.InvoicesEdit.events({
   'click #invoices_edit_update_invoice': function(event, template) {
-    var error = false;
     var start = template.find('#invoices_edit_start').value;
     var end = template.find('#invoices_edit_end').value;
     var company = template.find('#invoices_edit_company').value;
@@ -204,28 +228,6 @@ Template.InvoicesEdit.events({
     var services = template.find('#invoices_edit_services').value;
     var terms = template.find('#invoices_edit_terms').value;
     var percentage = template.find('#invoices_edit_percentage').value;
-
-    if (start === null || start.length === 0) {
-      template.startError.set('Start date is required');
-      error = true;
-    } else if (!moment(start, 'YYYY-MM-DD').isValid()) {
-      template.startError.set('Start date is not valid');
-      error = true;
-    } else {
-      template.startError.set('');
-    }
-
-    if (end === null || end.length === 0) {
-      template.endError.set('End date is required');
-      error = true;
-    } else if (!moment(end, 'YYYY-MM-DD').isValid()) {
-      template.endError.set('End date is not valid');
-      error = true;
-    } else {
-      template.endError.set('');
-    }
-
-    if (error) return;
 
     var id = Iron.controller().params._id;
     Meteor.call(
@@ -241,9 +243,9 @@ Template.InvoicesEdit.events({
         percentage: percentage
       },
       function(error, result) {
-        if (error) return;
-
-        Router.go('invoices.show', {_id: id});
+        if (!handleInvoiceError(error, template)) {
+          Router.go('invoices.show', {_id: id});
+        }
       }
     );
   },
@@ -259,6 +261,21 @@ Template.InvoicesEdit.helpers({
   },
   endError: function() {
     return Template.instance().endError.get();
+  },
+  companyError: function() {
+    return Template.instance().companyError.get();
+  },
+  customerError: function() {
+    return Template.instance().customerError.get();
+  },
+  servicesError: function() {
+    return Template.instance().servicesError.get();
+  },
+  termsError: function() {
+    return Template.instance().termsError.get();
+  },
+  percentageError: function() {
+    return Template.instance().percentageError.get();
   },
   invoice: function() {
     var id = Iron.controller().params._id;
