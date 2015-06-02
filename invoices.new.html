@@ -1,0 +1,120 @@
+<template name="InvoicesNew">
+  <form>
+    <div class="form-group {{hasError startError}} {{hasError endError}}">
+      <label for="invoices_new_daterange">Date Range</label>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-daterange input-group" id="invoices_new_daterange">
+            <input id="invoices_new_start" type="text" class="form-control" name="start" value="{{start}}"/>
+            <span class="input-group-addon">to</span>
+            <input id="invoices_new_end" type="text" class="form-control" name="end" value="{{end}}" />
+          </div>
+          {{#if startError}}
+            <p class="help-block">{{startError}}</p>
+          {{/if}}
+          {{#if endError}}
+            <p class="help-block">{{endError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError companyError}}">
+      <label for="invoices_new_company">Company</label>
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_new_company" class="form-control" rows="4">{{company}}</textarea>
+          {{#if companyError}}
+            <p class="help-block">{{companyError}}</p>
+          {{else}}
+            <p class="help-block">The default can be set in your profile. Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{company}}{{/markdown}}</div>
+      </div>
+    </div>
+    <div class="form-group {{hasError customerError}}">
+      <label for="invoices_new_customer">Customer</label>
+      <span class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-search"></span><span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          {{#each customers}}
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#" class="invoices_new_customer_option">{{name}}</a>
+            </li>
+          {{/each}}
+          {{#if customers.count}}
+            <li class="divider"></li>
+          {{/if}}
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="#" id="invoices_new_create_customer">
+              <span class="glyphicon glyphicon-plus"></span> Create a customer
+            </a>
+          </li>
+        </ul>
+      </span>
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="invoices_new_customer" class="form-control" rows="4">{{customer}}</textarea>
+          {{#if customerError}}
+            <p class="help-block">{{customerError}}</p>
+          {{else}}
+            <p class="help-block">Add two spaces at the end of a line to cause it to wrap when formatted.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{customer}}{{/markdown}}</div>
+      </div>
+    </div>
+    <div class="form-group {{hasError servicesError}}">
+      <label for="invoices_new_services">Services</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_new_services" class="form-control" placeholder="eg. Massage Therapy/RMT" value="{{services}}"/>
+          {{#if servicesError}}
+            <p class="help-block">{{servicesError}}</p>
+          {{else}}
+            <p class="help-block">The default can be set in your profile.</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError termsError}}">
+      <label for="invoices_new_terms">Payment Terms</label>
+      <span class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="glyphicon glyphicon-search"></span><span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          {{#each terms}}
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="invoices_new_terms_option">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </span>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="invoices_new_terms" class="form-control"/>
+          {{#if termsError}}
+            <p class="help-block">{{termsError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError percentageError}}">
+      <label for="invoices_new_percentage">Percentage</label>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input id="invoices_new_percentage" class="form-control" type="number"/>
+            <span class="input-group-addon">%</span>
+          </div>
+          {{#if percentageError}}
+            <p class="help-block">{{percentageError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <button id="invoices_new_create_invoice" class="btn btn-primary" type="button">create</button>
+    <button id="invoices_new_cancel" class="btn btn-default" type="button">cancel</button>
+  </form>
+</template>

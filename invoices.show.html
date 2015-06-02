@@ -1,0 +1,199 @@
+<template name="InvoicesShow">
+  <div class="hidden-print">
+    <h2>
+      {{invoice.start}} - {{invoice.end}}
+      <div class="btn-group pull-right">
+        <button id="invoices_show_edit_invoice" class="btn btn-default" title="Edit invoice details"><span class="glyphicon glyphicon-pencil"></span></button>
+        {{#if invoice.active}}
+          <button id="invoices_show_remove_invoice" class="btn btn-default" title="Archive invoice"><span class="glyphicon glyphicon-trash"></span></button>
+        {{/if}}
+      </div>
+    </h2>
+    <div class="row">
+      <div class="col-sm-9">
+        {{#markdown}}{{invoice.customer}}{{/markdown}}
+      </div>
+      <div class="col-sm-3">
+        {{#markdown}}{{invoice.company}}{{/markdown}}
+      </div>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item {{termsClass}}">
+        Terms
+      </div>
+      <div class="list-group-item">
+        <div class="row">
+          <div class="col-lg-1 col-sm-3"><strong>Services</strong></div>
+          <div class="col-lg-3 col-sm-9">{{invoice.services}}</div>
+          <div class="col-lg-1 col-sm-3"><strong>Payment Terms</strong></div>
+          <div class="col-lg-3 col-sm-9">{{invoice.terms}}</div>
+          <div class="col-lg-1 col-sm-3"><strong>Percentage</strong></div>
+          <div class="col-lg-3 col-sm-9">{{invoice.percentage}}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="visible-print-block">
+    <table class="invoice-header">
+      <tr>
+        <td>
+          {{#markdown}}{{invoice.customer}}{{/markdown}}
+        </td>
+        <td>
+          {{#markdown}}{{invoice.company}}{{/markdown}}
+        </td>
+      </tr>
+    </table>
+    <table class="invoice-terms">
+      <tr>
+        <th colspan="2">Dates</th>
+        <th>Services</th>
+        <th>Payment Terms</th>
+        <th>Percentage</th>
+      </tr>
+      <tr>
+        <td>{{invoice.start}}</td>
+        <td>{{invoice.end}}</td>
+        <td>{{invoice.services}}</td>
+        <td>{{invoice.terms}}</td>
+        <td>{{invoice.percentage}}%</td>
+      </tr>
+    </table>
+  </div>
+  {{> invoiceItems invoice}}
+</template>
+
+<template name="invoiceItems">
+  <div class="hidden-print">
+    <ul class="list-group">
+      {{#if active}}
+        <li class="list-group-item active">
+          <div class="list-item-btn-group pull-right">
+            <button id="invoice_items_new_invoice_item" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+          </div>
+          Items
+        </li>
+      {{else}}
+        <li class="list-group-item disabled">
+          Items
+        </li>
+      {{/if}}
+      {{#if items.count}}
+        {{#each items}}
+          {{> invoiceItem}}
+        {{/each}}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-1">
+              <strong>Total</strong>
+            </div>
+            <div class="col-sm-offset-3 col-sm-3 text-right">
+              <strong>{{fmtPrice totalPrice}}</strong>
+            </div>
+          </div>
+        </li>
+      {{else}}
+        {{#if active}}
+          <li class="list-group-item">
+            To create an invoice item click the <span class="glyphicon glyphicon-plus"></span> above.
+          </li>
+        {{/if}}
+      {{/if}}
+      {{#unless active}}
+        <li class="list-group-item">
+          To reactivate the invoice click the <span class="glyphicon glyphicon-pencil"></span> above and update the invoice.
+        </li>
+      {{/unless}}
+    </ul>
+  </div>
+  <div class="visible-print-block">
+    <table class="invoice-items">
+      <tr>
+        <th>Quantity</th>
+        <th>Description</th>
+        <th class="price">Unit Price</th>
+        <th class="price">Line Total</th>
+      </tr>
+      {{#each items}}
+        {{> invoiceItem}}
+      {{/each}}
+      <tr>
+        <th class="invisible" colspan="2"></th>
+        <th>Total</th>
+        <th class="price">{{fmtPrice totalPrice}}</th>
+      </tr>
+    </table>
+  </div>
+</template>
+
+<template name="invoiceItem">
+  <tr class="list-group-item hidden-print"><td colspan="4">
+    {{#if isEditing}}
+      <div class="list-item-btn-group pull-right">
+        <button id="invoice_item_edit_done_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_done"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+      <div class="row form-inline">
+        <div class="col-md-1">
+          <label for="invoice_item_item_{{_id}}">Item</label>
+        </div>
+        <div class="col-md-4">
+          <select id="invoice_item_item_{{_id}}" class="form-control">
+            <option value="">select an item</option>
+            {{#each items}}
+              <option value="{{_id}}" {{selectedIfEquals _id ../itemId}}>{{description}} ({{code}})</option>
+            {{/each}}
+          </select>
+          <span id="invoice_item_new_item" class="glyphicon glyphicon-plus" title="create an item"></span>
+        </div>
+        <div class="col-md-1 {{hasError quantityError}}">
+          <label for="invoice_item_quantity_{{_id}}">Quantity</label>
+        </div>
+        <div class="col-md-2 {{hasError quantityError}}">
+          <input id="invoice_item_quantity_{{_id}}" type="number" class="form-control text-right" value="{{quantity}}"/>
+        </div>
+      </div>
+      {{#if quantityError}}
+        <div class="row row-hint has-error">
+          <div class="col-md-5">
+            <span class="help-block">{{quantityError}}</span>
+          </div>
+        </div>
+      {{/if}}
+      {{#unless items.count}}
+        <div class="row row-hint">
+          <div class="col-md-5">
+            To create a new item, click the <span class="glyphicon glyphicon-plus"></span> next to the item list.
+          </div>
+        </div>
+      {{/unless}}
+    {{else}}
+      {{#if ../active}}
+        <div class="list-item-btn-group pull-right">
+          <button id="invoice_item_edit_invoice_item_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_edit_invoice_item"><span class="glyphicon glyphicon-pencil"></span></button>
+          <button id="invoice_item_remove_invoice_item_{{_id}}" type="button" class="btn btn-default btn-sm invoice_item_remove_invoice_item"><span class="glyphicon glyphicon-trash"></span></button>
+        </div>
+      {{/if}}
+      {{#if itemId}}
+        <div class="row">
+          <div class="col-sm-3">
+            {{itemDescription}} ({{itemCode}})
+          </div>
+          <div class="col-sm-1">
+            {{quantity}}
+          </div>
+          <div class="col-sm-3 text-right">
+            {{fmtPrice price}}
+          </div>
+        </div>
+      {{else}}
+        <span class="text-muted">To set the item type and quantity click the <span class="glyphicon glyphicon-pencil"></span> to the right.</span>
+      {{/if}}
+    {{/if}}
+  </td></tr>
+  <tr class="visible-print-table-row">
+    <td>{{quantity}}</td>
+    <td>{{itemDescription}}</td>
+    <td class="price">{{fmtPrice itemPrice}}</td>
+    <td class="price">{{fmtPrice price}}</td>
+  </tr>
+</template>
