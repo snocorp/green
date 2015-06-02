@@ -30,6 +30,13 @@ Template.Profile.helpers({
 Template.ProfileEdit.onCreated(function() {
   this.companyError = new ReactiveVar('');
   this.servicesError = new ReactiveVar('');
+
+  var user = Meteor.user();
+  var company = false;
+  if (user) {
+    company = user.profile.company;
+  }
+  this.company = new ReactiveVar(company);
 });
 
 Template.ProfileEdit.events({
@@ -65,6 +72,13 @@ Template.ProfileEdit.events({
   },
   'click #profile_edit_cancel': function(event, template) {
     Router.go('profile');
+  },
+  'keyup, change #profile_edit_company': function(event, template) {
+    var company = template.find('#profile_edit_company').value;
+
+    Template.instance().company.set(company);
+
+    return true;
   }
 });
 
@@ -76,12 +90,7 @@ Template.ProfileEdit.helpers({
     return Template.instance().servicesError.get();
   },
   company: function() {
-    var user = Meteor.user();
-    if (user) {
-      return user.profile.company;
-    } else {
-      return false;
-    }
+    return Template.instance().company.get();
   },
   services: function() {
     var user = Meteor.user();
