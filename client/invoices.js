@@ -274,13 +274,6 @@ Template.InvoicesEdit.onCreated(function() {
 
   this.company = new ReactiveVar('');
   this.customer = new ReactiveVar('');
-});
-
-Template.InvoicesEdit.onRendered(function() {
-  $('#invoices_edit_daterange').datepicker({
-    format: "yyyy-mm-dd",
-    orientation: "top auto"
-  });
 
   var self = this;
   var id = Iron.controller().params._id;
@@ -289,6 +282,13 @@ Template.InvoicesEdit.onRendered(function() {
     var invoice = Invoices.findOne(id);
     self.company.set(invoice.company);
     self.customer.set(invoice.customer);
+  });
+});
+
+Template.InvoicesEdit.onRendered(function() {
+  $('#invoices_edit_daterange').datepicker({
+    format: "yyyy-mm-dd",
+    orientation: "top auto"
   });
 });
 

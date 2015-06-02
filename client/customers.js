@@ -5,6 +5,16 @@
 Template.CustomersEdit.onCreated(function() {
   this.nameError = new ReactiveVar('');
   this.descriptionError = new ReactiveVar('');
+
+  this.description = new ReactiveVar('');
+
+  var self = this;
+  var id = Iron.controller().params._id;
+
+  this.subscribe('customers', function() {
+    var customer = Customers.findOne(id);
+    self.description.set(customer.description);
+  });
 });
 
 Template.CustomersEdit.events({
@@ -49,6 +59,13 @@ Template.CustomersEdit.events({
   'click #customers_edit_cancel': function(event, template) {
     var id = Iron.controller().params._id;
     Router.go('customers.show', {_id: id});
+  },
+  'keyup, change #customers_edit_description': function(event, template) {
+    var description = template.find('#customers_edit_description').value;
+
+    Template.instance().description.set(description);
+
+    return true;
   }
 });
 
@@ -62,12 +79,17 @@ Template.CustomersEdit.helpers({
   customer: function() {
     var id = Iron.controller().params._id;
     return Customers.findOne(id);
+  },
+  description: function() {
+    return Template.instance().description.get();
   }
 });
 
 Template.CustomersNew.onCreated(function() {
   this.nameError = new ReactiveVar('');
   this.descriptionError = new ReactiveVar('');
+
+  this.description = new ReactiveVar('');
 });
 
 Template.CustomersNew.events({
@@ -126,6 +148,13 @@ Template.CustomersNew.events({
     } else {
       Router.go('customers');
     }
+  },
+  'keyup, change #customers_new_description': function(event, template) {
+    var description = template.find('#customers_new_description').value;
+
+    Template.instance().description.set(description);
+
+    return true;
   }
 });
 
@@ -135,6 +164,9 @@ Template.CustomersNew.helpers({
   },
   descriptionError: function() {
     return Template.instance().descriptionError.get();
+  },
+  description: function() {
+    return Template.instance().description.get();
   }
 });
 

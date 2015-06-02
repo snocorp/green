@@ -1,0 +1,47 @@
+<template name="CustomersNew">
+  <form>
+    <div class="form-group {{hasError nameError}}">
+      <label for="customers_new_name">Name</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="customers_new_name" class="form-control" type="text" value="{{name}}" name="name" placeholder="eg. Zen Massage"/>
+          {{#if nameError}}
+            <p class="help-block">{{nameError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError descriptionError}}">
+      <label for="customers_new_description">Description</label>
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="customers_new_description" class="form-control" rows="4" name="description">{{customer.description}}</textarea>
+          {{#if descriptionError}}
+            <p class="help-block">{{descriptionError}}</p>
+          {{else}}
+            <p class="help-block">Description will be copied to the invoice when a customer is chosen.</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{description}}{{/markdown}}</div>
+      </div>
+    </div>
+    <div class="form-group {{hasError percentageError}}">
+      <label for="customers_new_percentage">Percentage</label>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input id="customers_new_percentage" class="form-control" type="number"/>
+            <span class="input-group-addon">%</span>
+          </div>
+          {{#if percentageError}}
+            <p class="help-block">{{percentageError}}</p>
+          {{else}}
+            <p class="help-block">Percentage will be copied to the invoice when a customer is chosen.</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </form>
+  <button id="customers_new_create_customer" type="button" class="btn btn-primary">create</button>
+  <button id="customers_new_cancel" type="button" class="btn btn-default">cancel</button>
+</template>

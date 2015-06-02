@@ -1,0 +1,41 @@
+<template name="CustomersEdit">
+  <form>
+    <div class="form-group {{hasError nameError}}">
+      <label for="customers_edit_name">Name</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="customers_edit_name" class="form-control" type="text" value="{{customer.name}}" name="name" placeholder="eg. Zen Massage"/>
+          {{#if nameError}}
+            <p class="help-block">{{nameError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError descriptionError}}">
+      <label for="customers_edit_description">Description</label>
+      <div class="row">
+        <div class="col-md-6">
+          <textarea id="customers_edit_description" class="form-control" rows="4" name="description" placeholder="ie. full address">{{customer.description}}</textarea>
+          {{#if descriptionError}}
+            <p class="help-block">{{descriptionError}}</p>
+          {{else}}
+            <p class="help-block">
+              Description will be copied to the invoice when a customer is chosen.
+              Add two spaces at the end of a line to cause it to wrap when formatted.
+            </p>
+          {{/if}}
+        </div>
+        <div class="col-md-6 hidden-xs hidden-sm">{{#markdown}}{{description}}{{/markdown}}</div>
+      </div>
+    </div>
+    <div class="form-group {{hasError percentageError}}">
+      <label for="customers_edit_percentage">Percentage</label>
+      <div class="input-group">
+        <input id="customers_edit_percentage" class="form-control" type="number" value="{{customer.percentage}}"/>
+        <span class="input-group-addon">%</span>
+      </div>
+    </div>
+  </form>
+  <button id="customers_edit_update_customer" type="button" class="btn btn-primary">update</button>
+  <button id="customers_edit_cancel" type="button" class="btn btn-default">cancel</button>
+</template>
