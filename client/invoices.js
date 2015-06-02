@@ -42,6 +42,45 @@ Template.Invoices.helpers({
   }
 });
 
+var totalInvoicePrice = function(id) {
+  var invoiceItems = InvoiceItems.find({invoiceId: id});
+  var total = 0;
+
+  invoiceItems.forEach(function(invoiceItem, index) {
+    var item = Items.findOne(invoiceItem.itemId);
+    if (item) {
+      var price = item.price;
+
+      var itemPrices = ItemPrices.find({
+        itemId: invoiceItem.itemId,
+        untilDate: {$gte: Template.currentData().end}
+      }, {
+        sort: {
+          untilDate: -1
+        }
+      }).fetch();
+
+      if (itemPrices.length > 0) {
+        price = itemPrices[0].price;
+      }
+
+      if (price) {
+        price = invoiceItem.quantity * price;
+      }
+
+      total += price;
+    }
+  });
+
+  return total / 100;
+};
+
+Template.invoice.helpers({
+  totalPrice: function() {
+    return totalInvoicePrice(Template.instance().data._id);
+  }
+});
+
 Template.InvoicesNew.onCreated(function() {
   this.startError = new ReactiveVar('');
   this.endError = new ReactiveVar('');
@@ -378,36 +417,8 @@ Template.invoiceItems.helpers({
   },
   totalPrice: function() {
     var id = Iron.controller().params._id;
-    var invoiceItems = InvoiceItems.find({invoiceId: id});
-    var total = 0;
 
-    invoiceItems.forEach(function(invoiceItem, index) {
-      var item = Items.findOne(invoiceItem.itemId);
-      if (item) {
-        var price = item.price;
-
-        var itemPrices = ItemPrices.find({
-          itemId: invoiceItem.itemId,
-          untilDate: {$gte: Template.currentData().end}
-        }, {
-          sort: {
-            untilDate: -1
-          }
-        }).fetch();
-
-        if (itemPrices.length > 0) {
-          price = itemPrices[0].price;
-        }
-
-        if (price) {
-          price = invoiceItem.quantity * price;
-        }
-
-        total += price;
-      }
-    });
-
-    return total / 100;
+    return totalInvoicePrice(id);
   }
 });
 

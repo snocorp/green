@@ -20,5 +20,10 @@
 </template>
 
 <template name="invoice">
-  <a href="{{pathFor route='invoices.show'}}" class="list-group-item {{isArchived this}}">{{start}} - {{end}}</a>
+  <a href="{{pathFor route='invoices.show'}}" class="list-group-item {{isArchived this}}">
+    <div class="row">
+      <div class="col-sm-4">{{start}} - {{end}}</div>
+      <div class="col-sm-8 text-right">{{fmtPrice totalPrice}}</div>
+    </div>
+  </a>
 </template>
