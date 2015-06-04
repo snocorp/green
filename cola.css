@@ -1,4 +1,16 @@
-/* CSS declarations go here */
+@import url(http://fonts.googleapis.com/css?family=Comfortaa);
+
+.navbar-brand,
+.navbar-nav {
+  font-family: 'Comfortaa', sans-serif;
+}
+
+.navbar-brand img {
+  display: inline-block;
+  height: 26px;
+  vertical-align: middle;
+}
+
 @media (min-width: 1200px) {
   .floating-action {
     width: 1170px;
