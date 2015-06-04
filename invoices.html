@@ -7,7 +7,7 @@
     </div>
   </h2>
   {{#if invoices.count}}
-    <div class="list-group">
+    <div class="collection">
       {{#each invoices}}
         {{> invoice}}
       {{/each}}
@@ -20,10 +20,10 @@
 </template>
 
 <template name="invoice">
-  <a href="{{pathFor route='invoices.show'}}" class="list-group-item {{isArchived this}}">
+  <a href="{{pathFor route='invoices.show'}}" class="collection-item {{isArchived this}}">
     <div class="row">
-      <div class="col-sm-4">{{start}} - {{end}}</div>
-      <div class="col-sm-8 text-right">{{fmtPrice totalPrice}}</div>
+      <div class="col s4">{{start}} - {{end}}</div>
+      <div class="col s8 right-align">{{fmtPrice totalPrice}}</div>
     </div>
   </a>
 </template>

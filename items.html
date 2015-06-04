@@ -56,14 +56,15 @@
 
 <template name="Items">
   <div class="floating-action"><span id="items_new_item" class="glyphicon glyphicon-plus-sign"></span></div>
+  <div class="right">
+    <input type="checkbox" id="items_toggle_display_archived" checked="{{displayArchived}}" />
+    <label for="items_toggle_display_archived">Display Archived Items</label>
+  </div>
   <h2>
     Items
-    <div class="btn-group pull-right">
-      <button id="items_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}"><span class="glyphicon glyphicon-folder-close"></span></button>
-    </div>
   </h2>
   {{#if items.count}}
-    <div class="list-group">
+    <div class="collection">
       {{#each items}}
         {{> item}}
       {{/each}}
@@ -76,15 +77,15 @@
 </template>
 
 <template name="item">
-  <a href="{{pathFor route='items.show'}}" class="list-group-item {{isArchived this}}">
+  <a href="{{pathFor route='items.show'}}" class="collection-item {{isArchived this}}">
     <div class="row">
-      <div class="col-sm-1">
+      <div class="col s2">
         {{code}}
       </div>
-      <div class="col-sm-4">
+      <div class="col s4">
         {{description}}
       </div>
-      <div class="col-sm-2 text-right">
+      <div class="col s2 text-right">
         {{fmtPrice price}}
       </div>
     </div>
@@ -105,16 +106,16 @@
 </template>
 
 <template name="itemPrices">
-  <ul class="list-group">
+  <ul class="collection">
     {{#if active}}
-      <li class="list-group-item active">
+      <li class="collection-item active">
         <div class="list-item-btn-group pull-right">
           <button id="item_prices_new_item_price" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
         </div>
         Prices
       </li>
     {{else}}
-      <li class="list-group-item disabled">
+      <li class="collection-item disabled">
         Prices
       </li>
     {{/if}}
@@ -123,7 +124,7 @@
         <div class="col-sm-2">
           <strong>Current</strong>
         </div>
-        <div class="col-sm-2 text-right">
+        <div class="col-sm-2 right-align">
           {{fmtPrice price}}
         </div>
       </div>
@@ -164,7 +165,7 @@
           <label for="item_price_price_{{_id}}" class="control-label">Price</label>
         </div>
         <div class="col-md-2 {{hasError priceError}}">
-          <input id="item_price_price_{{_id}}" type="number" class="form-control text-right" value="{{price}}"/>
+          <input id="item_price_price_{{_id}}" type="number" class="form-control right-align" value="{{price}}"/>
         </div>
       </div>
       {{#if untilDateError}}

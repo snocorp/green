@@ -5,28 +5,9 @@
 <body></body>
 
 <template name="ApplicationLayout">
-  <nav class="navbar navbar-default navbar-static-top hidden-print">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">
-          <img src="/images/bottle.svg">
-          invoice cola
-        </a>
-      </div>
-      <div class="collapse navbar-collapse" id="navbar">
-        {{> menu}}
-
-        <ul class="nav navbar-nav navbar-right">
-          {{> loginButtons}}
-        </ul>
-      </div>
-    </div>
+  <nav class="nav-wrapper hidden-print">
+    <a class="brand-logo" href="/">invoice cola</a>
+    {{> menu}}
   </nav>
   <div class="container">
     {{> yield}}
@@ -35,23 +16,26 @@
 
 
 <template name="menu">
-  {{#if currentUser}}
-    <ul class="nav navbar-nav">
+  <ul class="right">
+    {{#if currentUser}}
       <li class="{{isActiveRoute regex='invoices'}}"><a href="/invoices">invoices</a></li>
       <li class="{{isActiveRoute regex='items'}}"><a href="/items">items</a></li>
       <li class="{{isActiveRoute regex='customers'}}"><a href="/customers">customers</a></li>
       <li class="{{isActiveRoute regex='profile'}}"><a href="/profile">profile</a></li>
-    </ul>
-  {{/if}}
+    {{/if}}
+    <li>
+      {{> loginButtons}}
+    </li>
+  </ul>
 </template>
 
 <template name="Home">
-  <div class="jumbotron">
+  <div class="jumbotron z-depth-2">
     <div class="row">
-      <div class="col-md-offset-2 col-md-8">
-        <div class="jumbotron-icon pull-right"><span class="glyphicon glyphicon-list-alt"></span></div>
-        <h1>green</h1>
-        <p>Simple periodic invoicing for service professionals.</p>
+      <div class="col offset-m2 m8">
+        <div class="right"><img src="/images/bottle.svg"></div>
+        <h1>invoice cola</h1>
+        <p>Refreshing invoicing for service professionals.</p>
       </div>
     </div>
   </div>

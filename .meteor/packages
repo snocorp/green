@@ -7,11 +7,11 @@
 meteor-platform
 accounts-password
 iron:router
-ian:accounts-ui-bootstrap-3
-twbs:bootstrap
-rajit:bootstrap3-datepicker
 momentjs:moment
 reactive-var
 zimme:iron-router-active
 markdown
 percolate:migrations
+materialize:materialize
+useraccounts:materialize
+accounts-ui-unstyled
