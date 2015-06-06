@@ -1,8 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Comfortaa);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
 
 .navbar-brand,
 .navbar-nav {
-  font-family: 'Comfortaa', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .navbar-brand img {
