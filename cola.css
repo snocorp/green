@@ -1,7 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Comfortaa);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
 
-.nav-wrapper {
-  font-family: 'Comfortaa', sans-serif;
+.nav-wrapper,
+.title {
+  font-family: 'Roboto', sans-serif;
 }
 
 .brand-logo {
@@ -109,22 +110,16 @@
   .hidden-print {
     display: none;
   }
-  
+
   .visible-print-table-row {
     display: table-row;
   }
 }
 
-.floating-action {
+.btn-floating {
   position: fixed;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  bottom: 10px;
-  margin-bottom: 0;
-  text-align: right;
-  font-size: 40px;
+  bottom: 23px;
+  right: 23px;
   z-index: 10;
 }
 

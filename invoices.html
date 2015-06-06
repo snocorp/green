@@ -1,10 +1,11 @@
 <template name="Invoices">
-  <div class="floating-action"><span id="invoices_new_invoice" class="glyphicon glyphicon-plus-sign" title="Create a new invoice"></span></div>
-  <h2>
+  <a id="invoices_new_invoice" class="btn-floating btn-large waves-effect waves-light red"><i class="mdi-content-add"></i></a>
+  <div class="right">
+    <input type="checkbox" id="invoices_toggle_display_archived" checked="{{displayArchived}}" />
+    <label for="invoices_toggle_display_archived">Display Archived Invoices</label>
+  </div>
+  <h2 class="title">
     Invoices
-    <div class="btn-group pull-right">
-      <button id="invoices_toggle_display_archived" class="btn btn-default {{activeIf displayArchived}}" title="{{#if displayArchived}}Hide{{else}}Show{{/if}} archived"><span class="glyphicon glyphicon-folder-close"></span></button>
-    </div>
   </h2>
   {{#if invoices.count}}
     <div class="collection">
