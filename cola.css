@@ -1,7 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
 
 .navbar-brand,
-.navbar-nav {
+.navbar-nav,
+.title {
   font-family: 'Roboto', sans-serif;
 }
 
@@ -14,6 +15,12 @@
 @media (min-width: 1200px) {
   .floating-action {
     width: 1170px;
+  }
+}
+
+@media (min-width: 992px) {
+  .floating-action {
+    width: 962px;
   }
 }
 
@@ -101,4 +108,86 @@ tr.list-group-item > td {
 
 textarea {
   resize: vertical;
+}
+
+.list-group-item {
+  border-radius: 0px !important;
+  padding: 18px;
+}
+
+.paper-shadow-shallow {
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .26);
+}
+
+.paper-shadow-medium {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .26);
+}
+
+.paper-shadow-deep {
+  box-shadow: 0 4px 9px 0 rgba(0, 0, 0, .26);
+}
+
+.navbar-default {
+  background-color: #00BCD4;
+  border-color: transparent;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #FF9800 !important;
+}
+
+.navbar-default a {
+  color: #fff !important;
+}
+
+:not(.btn-group) > .btn,
+.btn-group {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .26);
+}
+
+.btn,
+.form-control,
+.input-daterange input:first-child,
+.input-daterange input:last-child,
+.input-group-addon,
+.navbar-toggle {
+  border-radius: 0px;
+}
+
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus,
+.btn-primary {
+  background-color: #FF9800;
+  border-color: transparent;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  background-color: #F57C00;
+  border-color: transparent;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: transparent;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+#login-dropdown-list input:first-of-type,
+#login-dropdown-list input:last-of-type {
+  border-radius: 0px;
 }

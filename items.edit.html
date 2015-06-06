@@ -1,0 +1,39 @@
+<template name="ItemsEdit">
+  <form>
+    <div class="form-group {{hasError codeError}}">
+      <label for="items_edit_code">Code</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="items_edit_code" class="form-control" type="text" value="{{item.code}}" name="code" placeholder="eg. PVT30"/>
+          {{#if codeError}}
+            <p class="help-block">{{codeError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError descriptionError}}">
+      <label for="items_edit_description">Description</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="items_edit_description" class="form-control" type="text" value="{{item.description}}" name="description" placeholder="eg. Private Session 30 Minutes"/>
+          {{#if descriptionError}}
+            <p class="help-block">{{descriptionError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group {{hasError priceError}}">
+      <label for="items_edit_price">Price</label>
+      <div class="row">
+        <div class="col-md-6">
+          <input id="items_edit_price" class="form-control" type="number" value="{{price}}" name="price" placeholder="eg. 50.00" pattern="\d*.\d\d"/>
+          {{#if priceError}}
+            <p class="help-block">{{priceError}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </form>
+  <button id="items_edit_update_item" type="button" class="btn btn-primary">update</button>
+  <button id="items_edit_cancel" type="button" class="btn btn-default">cancel</button>
+</template>
