@@ -2,12 +2,6 @@
 /* global Meteor, Template, ReactiveVar, Router */
 'use strict';
 
-Template.Profile.events({
-  'click #profile_edit_profile': function(event, template) {
-    Router.go('profile.edit');
-  }
-});
-
 Template.Profile.helpers({
   'company': function() {
     var user = Meteor.user();

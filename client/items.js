@@ -7,9 +7,6 @@ Template.Items.onCreated(function() {
 });
 
 Template.Items.events({
-  'click #items_new_item': function() {
-    Router.go('items.new');
-  },
   'click #items_toggle_display_archived': function(event, template) {
     var value = Template.instance().displayArchived.get();
     Template.instance().displayArchived.set(!value);

@@ -12,9 +12,6 @@ Template.Invoices.onCreated(function() {
 });
 
 Template.Invoices.events({
-  'click #invoices_new_invoice': function() {
-    Router.go('invoices.new');
-  },
   'click #invoices_toggle_display_archived': function(event, template) {
     var value = Template.instance().displayArchived.get();
     Template.instance().displayArchived.set(!value);

@@ -18,7 +18,7 @@
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .floating-action {
     width: 962px;
   }
@@ -47,12 +47,13 @@
   z-index: 10;
 }
 
-.floating-action span {
-  cursor: pointer;
+.floating-action a {
+  color: #FF9800;
 }
 
-.floating-action span:hover {
-  color: #ccc;
+.floating-action a:hover,
+.floating-action a:focus {
+  color: #F57C00;
 }
 
 .jumbotron-icon {

@@ -175,9 +175,6 @@ Template.Customers.onCreated(function() {
 });
 
 Template.Customers.events({
-  'click #customers_new_customer': function() {
-    Router.go('customers.new');
-  },
   'click #customers_toggle_display_archived': function(event, template) {
     var value = Template.instance().displayArchived.get();
     Template.instance().displayArchived.set(!value);
