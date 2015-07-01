@@ -378,6 +378,24 @@ Template.InvoicesShow.helpers({
     var id = Iron.controller().params._id;
     return Invoices.findOne(id);
   },
+  endFormatted: function() {
+    var id = Iron.controller().params._id;
+    var invoice = Invoices.findOne(id);
+    if (invoice) {
+      return moment(invoice.end, 'YYYY-MM-DD').format('DD MMM YYYY');
+    } else {
+      return false;
+    }
+  },
+  startFormatted: function() {
+    var id = Iron.controller().params._id;
+    var invoice = Invoices.findOne(id);
+    if (invoice) {
+      return moment(invoice.start, 'YYYY-MM-DD').format('DD MMM YYYY');
+    } else {
+      return false;
+    }
+  },
   termsClass: function() {
     var id = Iron.controller().params._id;
     var invoice = Invoices.findOne(id);

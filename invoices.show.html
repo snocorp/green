@@ -1,7 +1,9 @@
 <template name="InvoicesShow">
   <div class="hidden-print">
     <h2>
-      {{invoice.start}} - {{invoice.end}}
+      <span class="text-nowrap">{{startFormatted}}</span>
+      -
+      <span class="text-nowrap">{{endFormatted}}</span>
       <div class="btn-group pull-right">
         <button id="invoices_show_edit_invoice" class="btn btn-default" title="Edit invoice details"><span class="glyphicon glyphicon-pencil"></span></button>
         {{#if invoice.active}}

@@ -144,7 +144,8 @@ textarea {
   background-color: #FF9800 !important;
 }
 
-.navbar-default a {
+.navbar-default li > a,
+.navbar-default a.navbar-brand {
   color: #fff !important;
 }
 
@@ -191,4 +192,13 @@ textarea {
 #login-dropdown-list input:first-of-type,
 #login-dropdown-list input:last-of-type {
   border-radius: 0px;
+}
+
+#login-other-options a {
+  color: #FF9800;
+}
+
+#login-other-options a:hover,
+#login-other-options a:focus {
+  color: #F57C00;
 }
