@@ -203,3 +203,7 @@ textarea {
 #login-other-options a:focus {
   color: #F57C00;
 }
+
+.account-btn-group > .btn {
+  margin-bottom: 4px;
+}
