@@ -66,13 +66,80 @@
 </template>
 
 <template name="Home">
-  <div class="jumbotron">
-    <div class="row">
-      <div class="col-md-offset-2 col-md-8">
-        <div class="jumbotron-icon pull-right"><span class="glyphicon glyphicon-list-alt"></span></div>
-        <h1 class="title">invoice cola</h1>
-        <p>Refreshing invoicing for service professionals.</p>
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8 col-xs-12">
+      <div class="jumbotron-icon pull-right hidden-xs"><span class="glyphicon glyphicon-list-alt"></span></div>
+      <h1 class="title">invoice cola</h1>
+      <p>Refreshing invoicing for service professionals.</p>
+      <div class="clearfix"></div>
+      <div class="panel panel-default paper-shadow-medium">
+        <div class="panel-body">
+          {{#if registerMode}}
+            {{> register}}
+          {{/if}}
+          {{#if loginMode}}
+            {{> login}}
+          {{/if}}
+          {{#if forgotMode}}
+            {{> forgot}}
+          {{/if}}
+        </div>
+        <div class="panel-footer">
+          {{#unless registerMode}}<a href="#" id="createAccount" class="btn btn-sm btn-info">Create account</a>{{/unless}}
+          {{#unless forgotMode}}<a href="#" id="forgotPassword" class="btn btn-sm btn-info">Forgot password?</a>{{/unless}}
+          {{#unless loginMode}}<a href="#" id="existingAccount" class="btn btn-sm btn-info">Already have an account?</a>{{/unless}}
+        </div>
       </div>
     </div>
   </div>
+</template>
+
+<template name="register">
+  <form class="{{hasError}}">
+    <div class="form-group">
+      <label class="control-label" for="registerEmail">Email</label>
+      <input type="email" class="form-control" id="registerEmail" value="{{email}}" placeholder="Email" required>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="registerPassword">Password</label>
+      <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+      {{#if hasError}}
+        <p class="help-block">{{registerError}}</p>
+      {{/if}}
+    </div>
+    <button type="submit" class="btn btn-primary">Sign up</button>
+  </form>
+</template>
+
+<template name="login">
+  <form class="{{hasError}}">
+    <div class="form-group">
+      <label class="control-label" for="loginEmail">Email</label>
+      <input type="email" class="form-control" id="loginEmail" value="{{email}}" placeholder="Email" required>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="loginPassword">Password</label>
+      <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+      {{#if hasError}}
+        <p class="help-block">{{loginError}}</p>
+      {{/if}}
+    </div>
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </form>
+</template>
+
+<template name="forgot">
+  <form>
+    <div class="form-group {{hasSuccess}} {{hasError}}">
+      <label class="control-label" for="forgotEmail">Email</label>
+      <input type="email" class="form-control" id="forgotEmail" placeholder="Email">
+      {{#if hasSuccess}}
+        <p class="help-block">Email with reset instruction is being sent and should arrive in a few minutes.</p>
+      {{/if}}
+      {{#if hasError}}
+        <p class="help-block">{{forgotEmailError}}</p>
+      {{/if}}
+    </div>
+    <button type="submit" class="btn btn-primary">Reset password</button>
+  </form>
 </template>
