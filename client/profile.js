@@ -5,7 +5,7 @@
 Template.Profile.helpers({
   'company': function() {
     var user = Meteor.user();
-    if (user) {
+    if (user && user.profile && user.profile.company) {
       return user.profile.company;
     } else {
       return false;
@@ -13,7 +13,7 @@ Template.Profile.helpers({
   },
   'services': function() {
     var user = Meteor.user();
-    if (user) {
+    if (user && user.profile && user.profile.services) {
       return user.profile.services;
     } else {
       return false;
@@ -27,7 +27,7 @@ Template.ProfileEdit.onCreated(function() {
 
   var user = Meteor.user();
   var company = false;
-  if (user) {
+  if (user && user.profile && user.profile.company) {
     company = user.profile.company;
   }
   this.company = new ReactiveVar(company);
@@ -70,7 +70,7 @@ Template.ProfileEdit.events({
   'keyup, change #profile_edit_company': function(event, template) {
     var company = template.find('#profile_edit_company').value;
 
-    Template.instance().company.set(company);
+    template.company.set(company);
 
     return true;
   }
@@ -88,7 +88,7 @@ Template.ProfileEdit.helpers({
   },
   services: function() {
     var user = Meteor.user();
-    if (user) {
+    if (user && user.profile && user.profile.services) {
       return user.profile.services;
     } else {
       return false;

@@ -89,7 +89,7 @@ Template.InvoicesNew.onCreated(function() {
 
   var user = Meteor.user();
   var companyDefault = false;
-  if (user) {
+  if (user && user.profile && user.profile.company) {
     companyDefault = user.profile.company;
   }
   this.company = new ReactiveVar(companyDefault);
