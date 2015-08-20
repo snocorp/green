@@ -196,7 +196,8 @@ textarea {
 }
 
 #login-other-options a {
-  color: #FF9800;
+  color: #FFAD33;
+  text-decoration: none;
 }
 
 #login-other-options a:hover,
