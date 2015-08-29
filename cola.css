@@ -32,6 +32,10 @@
   .visible-print-table-row {
     display: table-row;
   }
+
+  .invoice-header td:last-child {
+    float: right;
+  }
 }
 
 .floating-action {
